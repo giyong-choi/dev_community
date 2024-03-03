@@ -1,4 +1,4 @@
-hanwooplz
+team-recruitment-platform
 =============
 Portfolio website project for developers
 -------------
