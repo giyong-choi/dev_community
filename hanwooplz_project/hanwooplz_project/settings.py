@@ -110,8 +110,12 @@ WSGI_APPLICATION = 'hanwooplz_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': secrets['NAME'],
+        'USER': secrets['USER'],
+        'PASSWORD': secrets['PASSWORD'],
+        'HOST': secrets['HOST'],
+        'PORT': secrets['PORT'],
     }
 }
 
