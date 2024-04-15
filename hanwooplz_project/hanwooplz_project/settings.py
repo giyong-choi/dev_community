@@ -28,7 +28,7 @@ SECRET_KEY = secrets['SECRET_KEY']
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = secrets['ALLOWED_HOSTS']
+ALLOWED_HOSTS = [secrets['ALLOWED_HOSTS']]
 
 
 # Application definition
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     'tinymce',
     'channels',
     'channels_redis',
-    # 'django_elasticsearch_dsl',
 ]
 
 REDIS_HOST = 'localhost'
@@ -111,12 +110,8 @@ WSGI_APPLICATION = 'hanwooplz_project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': secrets['NAME'],
-        'USER': secrets['USER'],
-        'PASSWORD': secrets['PASSWORD'],
-        'HOST': secrets['HOST'],
-        'PORT': secrets['PORT'],
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
 
