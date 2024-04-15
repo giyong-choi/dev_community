@@ -1,6 +1,6 @@
 asgiref==3.8.1
 attrs==23.2.0
-autobahn==23.6.2
+autobahn==23.1.2
 Automat==22.10.0
 cffi==1.16.0
 channels==3.0.5
@@ -12,7 +12,7 @@ Django==4.2.6
 django-tinymce==3.6.1
 djangorestframework==3.14.0
 hyperlink==21.0.0
-idna==3.6
+idna==3.7
 incremental==22.10.0
 msgpack==1.0.8
 Pillow==10.1.0
@@ -25,8 +25,8 @@ pytz==2024.1
 redis==5.0.3
 service-identity==24.1.0
 six==1.16.0
-sqlparse==0.4.4
+sqlparse==0.5.0
 Twisted==24.3.0
 txaio==23.1.1
 typing_extensions==4.11.0
-zope.interface==6.2
+zope.interface==6.3
