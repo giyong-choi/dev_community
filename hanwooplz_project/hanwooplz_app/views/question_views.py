@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.contrib import messages
 from ..forms import *
 from ..models import *
 from ..serializers import *
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 def question_list(request, page_num=1):
     items_per_page = 10  # 페이지 당 항목 수
@@ -14,7 +16,7 @@ def question_list(request, page_num=1):
     question_lists = []
 
     query = request.GET.get('search')
-    search_type = request.GET.get('search_type')  # 검색 옵션을 가져옵니다
+    search_type = request.GET.get('search_type')
 
     # 검색
     filtered_questions = post_question
@@ -40,6 +42,8 @@ def question_list(request, page_num=1):
     for question in page_obj:
         post = Post.objects.get(id=question.post_id)
         author = UserProfile.objects.get(id=post.author_id)
+        post_question = get_object_or_404(PostQuestion, id=question.id)
+        keywords = post_question.keyword.strip("[]'").split(",")
 
         question_lists.append({
                     'title': post.title,
@@ -47,10 +51,13 @@ def question_list(request, page_num=1):
                     'author_id': post.author_id,
                     'post_question': question.id,
                     'author': author.username,
+                    'keywords': keywords,
                 })
 
     context = {
         "post_lists": question_lists,
+        "board_name": "질의응답",
+        "is_portfolio": True,
         "page_obj": page_obj,
         "query": query,
         "search_type": search_type,
@@ -64,6 +71,7 @@ def question(request, post_question_id=None):
         post_question = get_object_or_404(PostQuestion, id=post_question_id)
         post = get_object_or_404(Post, id=post_question.post_id)
         author = get_object_or_404(UserProfile, id=post.author_id)
+        keywords = post_question.keyword.strip("[]'").split(",")
 
         post_answer = PostAnswer.objects.filter(question_id=post_question_id)
         if post_answer:
@@ -93,8 +101,8 @@ def question(request, post_question_id=None):
             'author': author.username,
             'author_id': author.id,
             'created_at': post.created_at,
-            'like': post_question.like.count(),
-            'keywords': post_question.keyword,
+            'like': post_question.likes.count(),
+            'keywords': keywords,
             'post_question_id' : post_question_id,
             'post_id': post.id,
             'answers': answers,
@@ -170,6 +178,7 @@ def write_answer(request, post_question_id, post_answer_id=None):
         post_question = get_object_or_404(PostQuestion, id=post_question_id)
         post_ = get_object_or_404(Post, id=post_question.post_id)
         author_ = get_object_or_404(UserProfile, id=post_.author_id)
+        keywords = post_question.keyword.strip("[]'").split(",")
         if post_answer_id:
             post_answer = get_object_or_404(PostAnswer, id=post_answer_id)
             post = get_object_or_404(Post, id=post_answer.post_id)
@@ -184,19 +193,6 @@ def write_answer(request, post_question_id, post_answer_id=None):
         if 'delete-button' in request.POST:
             post.delete()
             return redirect('hanwooplz_app:question', post_question_id)
-        if 'temp-save-button' in request.POST:
-            messages.info(request, '임시저장은 현재 지원되지 않는 기능입니다.')
-            context={
-                'title_question': post_.title,
-                'keywords_question': post_question.keyword,
-                'content_question': post_.content,
-                'author_question': author_.username,
-                'author_id_question': author_.id,
-                'created_at_question': post_.created_at,
-                'post_question_id': post_question_id,
-                'content': request.POST.get('content'),
-            }
-            return render(request, 'write_answer.html', context)
         
         request.POST._mutable = True
         request.POST['title'] = '제목없음'
@@ -219,7 +215,7 @@ def write_answer(request, post_question_id, post_answer_id=None):
             messages.info(request, '답변을 등록하는데 실패했습니다. 다시 시도해주세요.')
             context={
                 'title_question': post_.title,
-                'keywords_question': post_question.keyword,
+                'keywords_question': keywords,
                 'content_question': post_.content,
                 'author_question': author_.username,
                 'author_id_question': author_.id,
@@ -233,7 +229,7 @@ def write_answer(request, post_question_id, post_answer_id=None):
             if request.user.id == post.author_id:
                 context = {
                     'title_question': post_.title,
-                    'keywords_question': post_question.keyword,
+                    'keywords_question': keywords,
                     'content_question': post_.content,
                     'author_question': author_.username,
                     'author_id_question': author_.id,
@@ -250,7 +246,7 @@ def write_answer(request, post_question_id, post_answer_id=None):
         else:
             context = {
                     'title_question': post_.title,
-                    'keywords_question': post_question.keyword,
+                    'keywords_question': keywords,
                     'content_question': post_.content,
                     'author_question': author_.username,
                     'author_id_question': author_.id,
@@ -268,14 +264,11 @@ def like(request, post_question_id, answer_id=None):
             post = get_object_or_404(PostAnswer, pk=answer_id)
         user = get_object_or_404(UserProfile, pk=request.user.id)
 
-        if user in post.like.all():
-            post.like.remove(user)
-            message = '추천이 취소됐습니다.'
+        if user in post.likes.all():
+            post.likes.remove(user)
         else:
-            post.like.add(user)
-            message = ''
+            post.likes.add(user)
 
         post.save()
-        return redirect('hanwooplz_app:question', post_question_id);
-        return render(request, 'question.html', {'message': message})
-    return redirect('hanwooplz_app:question', post_question_id);
+        return redirect('hanwooplz_app:question', post_question_id)
+    return redirect('hanwooplz_app:question', post_question_id)

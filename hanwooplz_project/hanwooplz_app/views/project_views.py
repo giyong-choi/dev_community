@@ -1,12 +1,14 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.contrib import messages
-from django.http import JsonResponse
 from ..forms import *
 from ..models import *
 from ..serializers import *
+
+from django.core.paginator import Paginator
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 def project_list(request, page_num=1):
     items_per_page = 9  # 페이지 당 항목 수
@@ -46,7 +48,9 @@ def project_list(request, page_num=1):
     for project in page_obj:
         post = Post.objects.get(id=project.post_id)
         author = UserProfile.objects.get(id=post.author_id)
-        is_recruiting = True if project.status == 1 else False
+        post_project = get_object_or_404(PostProject, id=project.id)
+        tech_stacks = post_project.tech_stack.strip("[]'").split(",")
+        is_recruiting = "모집중" if project.status == 1 else False
         project_status = "모집 완료" if project.status == 2 else "모집 중단"
 
         project_lists.append({
@@ -55,14 +59,14 @@ def project_list(request, page_num=1):
                     'author_id': post.author_id,
                     'post_project': project.id,
                     'author': author.username,
-                    'tech_stacks': project.tech_stack,
+                    'tech_stacks': tech_stacks,
                     'isRecruiting': is_recruiting,
                     "project_status": project_status,
                 })
 
     context = {
         "post_lists": project_lists,
-        "board_name": "프로젝트 팀원 모집",
+        "board_name": "팀원 모집",
         "is_portfolio": False,
         "page_obj": page_obj,
         "query": query,
@@ -78,6 +82,7 @@ def project(request, post_project_id=None):
         post_project = get_object_or_404(PostProject, id=post_project_id)
         post = get_object_or_404(Post, id=post_project.post_id)
         author = get_object_or_404(UserProfile, id=post.author_id)
+        tech_stacks = post_project.tech_stack.strip("[]'").split(",")
         members = ProjectMembers.objects.filter(project=post_project_id).count()
         context = {
             'title': post.title,
@@ -88,7 +93,7 @@ def project(request, post_project_id=None):
             'end_date': post_project.end_date,
             'members': members,
             'target_members': post_project.target_members,
-            'tech_stacks': post_project.tech_stack,
+            'tech_stacks': tech_stacks,
             'ext_link': post_project.ext_link,
             'content': post.content,
             'post_project_id' : post_project_id,
@@ -131,7 +136,7 @@ def write_project(request, post_project_id=None):
                 post_project_id = post_project.id
                 user = get_object_or_404(UserProfile, pk=request.user.id)
                 project = get_object_or_404(PostProject, pk=post_project_id)
-                ProjectMembers.objects.create(project=project, members=user)
+                ProjectMembers.objects.create(project=project, member=user)
             else:
                 post.save()
                 post_project.save()

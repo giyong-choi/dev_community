@@ -1,19 +1,20 @@
-from pyexpat.errors import messages
-from django.shortcuts import render, redirect, get_object_or_404, reverse
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
-from django.views.decorators.csrf import ensure_csrf_cookie
-from django.conf import settings
-from django.views import View
-from django.http import HttpResponse
-from django.http import JsonResponse
+import json
+
 from ..forms import *
 from ..models import *
 from ..serializers import *
-import json
-import openai
+
+from pyexpat.errors import messages
+
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
 from django.db.models import Q
-from django.contrib.auth.forms import PasswordResetForm, PasswordChangeForm
+from django.http import JsonResponse
+from django.shortcuts import render, redirect
+from django.urls import reverse
+from django.views import View
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 # Create your views here.
@@ -110,6 +111,7 @@ def log_out(request):
 def myinfo(request, user_id):
     userinfo = UserProfile.objects.get(id=user_id)
     user_posts = Post.objects.filter(author=userinfo)
+    tech_stacks = userinfo.tech_stack.strip("[]'").split(",")
 
     selected_category = request.GET.get('category', 'postportfolio')
 
@@ -140,7 +142,7 @@ def myinfo(request, user_id):
         "username": userinfo.username,
         "full_name": userinfo.full_name,
         "job": userinfo.job,
-        "tech_stack": userinfo.tech_stack,
+        "tech_stack": tech_stacks,
         "career": userinfo.career,
         "career_detail": userinfo.career_detail,
         "introduction": userinfo.introduction,
@@ -174,49 +176,6 @@ def post(request):
 def post_list(request):
     return render(request, "post_list.html")
 
-
-class ChatBot():
-    def __init__(self, model='gpt-3.5-turbo'):
-        self.model = model
-        self.messages = []
-        openai.api_key = settings.OPENAI_KEY
-
-    def ask(self, question):
-        self.messages.append({
-            'role': 'user',
-            'content': question
-        })
-        res = self.__ask__()
-        return res
-
-    def __ask__(self):
-        completion = openai.ChatCompletion.create(
-            model=self.model,
-            messages=self.messages
-        )
-        response = completion.choices[0].message['content']
-        self.messages.append({
-            'role': 'assistant',
-            'content': response
-        })
-        return response
-
-    def show_messages(self):
-        return self.messages
-
-    def clear(self):
-        self.messages.clear()
-
-
-def execute_chatbot(request):
-    if request.method == "POST":
-        data = json.loads(request.body.decode('utf-8'))
-        question = data.get('question')
-        chatbot = ChatBot()
-        response = chatbot.ask(question)
-        return JsonResponse({"response": response})
-    return render(request, 'index.html')
-
 @login_required
 @ensure_csrf_cookie
 def send_application(request):
@@ -232,9 +191,9 @@ def send_application(request):
             sender = UserProfile.objects.get(pk=sender_id)
 
             # 중복 레코드 방지를 위해 먼저 확인
-            if not Notifications.objects.filter(user=recipient, sender=sender, post=post).exists():
+            if not Notification.objects.filter(user=recipient, sender=sender, post=post).exists():
                 # 중복 레코드가 없을 때만 알림 메시지 생성
-                notification = Notifications(user=recipient, sender=sender, post=post, accept_or_not=None)
+                notification = Notification(user=recipient, sender=sender, post=post, accept_or_not=None)
                 notification.save()
                 success = True
             else:
@@ -256,7 +215,7 @@ def mark_notifications_as_read(request):
 
             for notification_id in notification_ids:
                 try:
-                    notification = Notifications.objects.get(id=notification_id)
+                    notification = Notification.objects.get(id=notification_id)
 
                     # 현재 사용자가 해당 알림을 소유하고 있는지 확인
                     if request.user == notification.sender:
@@ -264,7 +223,7 @@ def mark_notifications_as_read(request):
                         notification.save()  # 데이터베이스에 변경사항 저장
                     else:
                         return JsonResponse({'success': False, 'error': '권한이 없습니다.'})
-                except Notifications.DoesNotExist:
+                except Notification.DoesNotExist:
                     return JsonResponse({'success': False, 'error': f'알림을 찾을 수 없습니다: {notification_id}'})
             return JsonResponse({'success': True})
         except json.JSONDecodeError:
@@ -274,7 +233,7 @@ def mark_notifications_as_read(request):
 
 def get_notifications(request):
     if request.user.is_authenticated:
-        notifications = Notifications.objects.filter(Q(user=request.user) | Q(sender=request.user)).order_by('-created_at')
+        notifications = Notification.objects.filter(Q(user=request.user) | Q(sender=request.user)).order_by('-created_at')
 
         notifications_list = []
         for notification in notifications:
@@ -310,18 +269,18 @@ def accept_reject_notification(request):
             
             if notification_id is not None and result is not None:
                 try:
-                    notification = Notifications.objects.get(id=notification_id)
+                    notification = Notification.objects.get(id=notification_id)
 
                     if result == '수락':
                         notification.accept_or_not = True
                         notification.save()
                         
                         # 추가적인 작업을 수행 (예: ProjectMembers에 멤버 추가)
-                        sender = notification.sender.id
+                        sender = UserProfile.objects.get(id=notification.sender.id)
                         projectinfo = PostProject.objects.get(post_id=notification.post.id)
-                        projectid = projectinfo.id
-                        ProjectMembers.objects.create(members_id=sender, project_id=projectid)
-                        members = ProjectMembers.objects.filter(project_id=projectid).count()
+                        # projectid = projectinfo.id
+                        ProjectMembers.objects.create(member=sender, project=projectinfo)
+                        members = ProjectMembers.objects.filter(project=projectinfo.id).count()
                         if members >= projectinfo.target_members:
                             projectinfo.status = 2
                             projectinfo.save()
@@ -334,7 +293,7 @@ def accept_reject_notification(request):
                     response_data = {'success': True}
                     return JsonResponse(response_data)
 
-                except Notifications.DoesNotExist:
+                except Notification.DoesNotExist:
                     response_data = {'success': False, 'error': '알림을 찾을 수 없습니다.'}
                     return JsonResponse(response_data)
 
@@ -357,7 +316,7 @@ def check_duplicate_notification(request):
         post_id = request.POST.get('post_id')
 
         # 중복 알림 확인 로직
-        duplicate = Notifications.objects.filter(user=recipient_id, post=post_id).exists()
+        duplicate = Notification.objects.filter(user=recipient_id, post=post_id).exists()
 
         return JsonResponse({'duplicate': duplicate})
 # 아이디 찾기

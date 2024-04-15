@@ -1,6 +1,6 @@
 body {
-    background-color: #333;
-    color: white;
+    background-color: white;
+    color: black;
     font-family: Arial, sans-serif;
     display: flex;
     justify-content: center;
@@ -10,15 +10,12 @@ body {
 }
 
 .login-container {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: white;
     padding: 100px;
     border-radius: 20px;
     text-align: center;
     position: relative;
-}
-
-.login-container h1 {
-    text-shadow: 0 0 20px rgba(0, 0, 255, 0.8);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .login-buttons {
@@ -30,18 +27,18 @@ body {
 
 .login-form input[type="text"],
 .login-form input[type="password"] {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: rgba(0, 0, 0, 0.1);
     border: none;
     padding: 10px;
     border-radius: 5px;
-    color: white;
+    color: black;
     width: 100%;
     margin: 5px 0;
     text-align: center;
 }
 
 .login-form input[type="submit"] {
-    background: #03e9f4;
+    background-color: black;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -52,10 +49,10 @@ body {
 }
 
 .login-form input[type="submit"]:hover {
-    background: #02f2ff;
-    color: #fff;
+    background: white;
+    color: black;
     border-radius: 5px;
-    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+    box-shadow: 0 0 5px lightgray, 0 0 25px lightgray, 0 0 50px lightgray, 0 0 100px lightgray;
 }
 
 .login-form input[type="submit"]::before {
@@ -107,10 +104,6 @@ body {
     animation: slideIn 1s ease-in-out;
 }
 
-.login-form input[type="submit"] {
-    animation: scaleUp 0.5s ease-in-out;
-}
-
 @keyframes slideIn {
     0% {
         opacity: 0;
@@ -120,15 +113,5 @@ body {
     100% {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes scaleUp {
-    0% {
-        transform: scale(0.9);
-    }
-
-    100% {
-        transform: scale(1);
     }
 }

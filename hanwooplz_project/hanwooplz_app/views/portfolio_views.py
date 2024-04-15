@@ -1,11 +1,13 @@
-from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator
-from django.db.models import Q
-from django.contrib import messages
 from ..forms import *
 from ..models import *
 from ..serializers import *
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+
 
 def portfolio_list(request, page_num=1):
     items_per_page = 9  # 페이지 당 항목 수
@@ -40,6 +42,8 @@ def portfolio_list(request, page_num=1):
     for portfolio in page_obj:
         post = Post.objects.get(id=portfolio.post_id)
         author = UserProfile.objects.get(id=post.author_id)
+        post_portfolio = get_object_or_404(PostPortfolio, id=portfolio.id)
+        tech_stacks = post_portfolio.tech_stack.strip("[]'").split(",")
 
         portfolio_lists.append({
                     'title': post.title,
@@ -47,19 +51,19 @@ def portfolio_list(request, page_num=1):
                     'author_id': post.author_id,
                     'post_portfolio': portfolio.id,
                     'author': author.username,
-                    'tech_stacks': portfolio.tech_stack,
+                    'tech_stacks': tech_stacks,
                 })
 
     context = {
         "post_lists": portfolio_lists,
-        "board_name": "포트폴리오",
+        "board_name": "프로젝트",
         "is_portfolio": True,
         "page_obj": page_obj,
         "query": query,
         "search_type": search_type,
     }
 
-    return render(request, 'project_list.html', context)
+    return render(request, 'portfolio_list.html', context)
 
 
 
@@ -68,6 +72,8 @@ def portfolio(request, post_portfolio_id=None):
         post_portfolio = get_object_or_404(PostPortfolio, id=post_portfolio_id)
         post = get_object_or_404(Post, id=post_portfolio.post_id)
         author = get_object_or_404(UserProfile, id=post.author_id)
+        tech_stacks = post_portfolio.tech_stack.strip("[]'").split(",")
+
         context = {
             'title': post.title,
             'author': author.username,
@@ -76,7 +82,7 @@ def portfolio(request, post_portfolio_id=None):
             'start_date': post_portfolio.start_date,
             'end_date': post_portfolio.end_date,
             'members': post_portfolio.members,
-            'tech_stacks': post_portfolio.tech_stack,
+            'tech_stacks': tech_stacks,
             'ext_link': post_portfolio.ext_link,
             'content': post.content,
             'post_portfolio_id' : post_portfolio_id,

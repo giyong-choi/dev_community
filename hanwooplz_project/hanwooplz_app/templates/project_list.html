@@ -7,9 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/posts_list.css' %}" />
-    
     <title>{{ board_name }}</title>
 </head>
 
@@ -33,12 +31,6 @@
             </div>
             {% if post_lists %}
             {% if not is_portfolio %}
-            {% if query %}
-            <div class="search-result">
-                <a class="refresh" href="{% url 'hanwooplz_app:project_list' %}">전체 목록 다시 불러오기</a>
-                <p class="search-type" style="display: none"></p>
-            </div>
-            {% endif %}
             <div class="tab-container">
                 <ul class="tab-list">
                     <li class="tab"><a href="?filter_option=all">전체</a></li>
@@ -46,21 +38,47 @@
                 </ul>
             </div>
             {% endif %}
-            <div class="posts-grid">
-                {% for post in post_lists %}
-                <a class="post-tile" href="{% if is_portfolio %}{% url "hanwooplz_app:portfolio" post.post_portfolio %}{% else %}{% url "hanwooplz_app:project" post.post_project %}{% endif %}">
-                    <picture class="post-thumbnail">
-                        {% if not post.isRecruiting and post.post_project %}
-                        <p id="deprecated">{{ post.project_status }}</p>
-                        {% endif %}
-                        <img src="{% static 'img/'|add:post.tech_stacks.0|add:'.svg' %}" alt="썸네일">
-                    </picture>
-                    <h3 class="post-title">{{ post.title }}</h3>
-                    <p class="post-author">{{ post.author }}</p>
-                    <p class="post-created_at">{{ post.created_at }}</p>
-                </a>
-                {% endfor %}
-            </div>
+            <table class="board-table">
+                <thead>
+                    <tr>
+                        <th class="board-no">번호</th>
+                        <th class="board-title">제목</th>
+                        <th class="board-skill">기술 스택</th>
+                        <th class="board-status">모집 현황</th>
+                        <th class="board-author">작성자</th>
+                        <th class="board-date">작성 일시</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for post in post_lists %}
+                    <tr>
+                        <td>{{ post.post_project }}</td>
+                        <td>
+                            <a href="{% url 'hanwooplz_app:project' post.post_project %}">
+                                {{ post.title }}
+                            </a>
+                        </td>
+                        <td>
+                            {{ post.tech_stacks.0 }}
+                        </td>
+                        <td>
+                            {% if not post.isRecruiting and post.post_project %}
+                                {{ post.project_status }}
+                            {% else %}
+                                {{ post.isRecruiting }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'hanwooplz_app:myinfo' post.author_id %}">
+                                {{ post.author }}
+                            </a>
+                        </td>
+                        <td>{{ post.created_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             <div class="page">
             {% if page_obj.has_previous %}
                 {% if query %}
@@ -112,8 +130,6 @@
             </div>
         </div>
     </main>
-    {% include 'footer.html' %}
-    {% include 'chatbot.html' %}
 </body>
 <script>
     document.getElementById('search-select').addEventListener('change', function() {
@@ -134,7 +150,7 @@
         var titleElement = document.querySelector('.post-list h2');
         var board_name = '';
         if (window.location.href.includes('project-list')) {
-            board_name = '프로젝트 팀원 모집';
+            board_name = '팀원 모집';
         } else if (window.location.href.includes('portfolio-list')) {
             board_name = '포트폴리오';
         }

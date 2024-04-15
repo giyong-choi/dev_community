@@ -1,6 +1,7 @@
 tinymce.init({
   selector: 'textarea#content',
-  plugins: 'advcode advlist advtable autosave charmap codesample editimage emoticons help image link lists nonbreaking pagebreak searchreplace table visualblocks visualchars preview',
+  license_key: 'gpl',
+  plugins: 'advlist autosave charmap emoticons help image link lists nonbreaking pagebreak searchreplace table visualblocks visualchars preview',
   menubar: 'edit view insert format table',
   toolbar1: 'checklist bullist numlist | link image | removeformat | preview | help',
   toolbar2: 'fontselect fontsizeselect | bold italic underline forecolor backcolor | align lineheight | indent outdent',
@@ -32,9 +33,3 @@ tinymce.init({
     input.click();
   },
 });
-
-let question_container = document.querySelector(".question-container");
-if (question_container != null) {
-  question_container.style.width = "30%";
-  question_container.style.margin = "0px 20px 0px 0px";
-}
