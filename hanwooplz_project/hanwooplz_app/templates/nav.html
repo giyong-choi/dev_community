@@ -1,259 +1,25 @@
 {% load static %}
-<style>
-    *,
-    *::after,
-    *::before {
-        box-sizing: border-box;
-        padding: 0;
-        margin: 0;
-    }
-
-    .html {
-        font-size: 62.5%;
-    }
-
-    .navbar input[type="checkbox"],
-    .navbar .hamburger-lines {
-        display: none;
-    }
-
-    .container {
-        max-width: 1200px;
-        width: 90%;
-        margin: auto;
-    }
-
-    .navbar {
-        box-shadow: 0px 5px 10px 0px #aaa;
-        position: fixed;
-        width: 100%;
-        background: #fff;
-        color: #000;
-        opacity: 0.85;
-        z-index: 100;
-    }
-
-    .navbar-container {
-        display: flex;
-        justify-content: space-between;
-        height: 64px;
-        align-items: center;
-    }
-
-    .menu-items {
-        order: 2;
-        display: flex;
-    }
-
-    .logo {
-        order: 1;
-        font-size: 2.3rem;
-    }
-
-    .menu-items li {
-        list-style: none;
-        margin-left: 1.5rem;
-        font-size: 1.3rem;
-    }
-
-    .navbar a {
-        color: #444;
-        text-decoration: none;
-        font-weight: 500;
-        transition: color 0.3s ease-in-out;
-    }
-
-    .navbar a:hover {
-        color: #117964;
-    }
-
-    @media (max-width: 768px) {
-        .navbar {
-            opacity: 0.95;
-        }
-
-        .navbar-container input[type="checkbox"],
-        .navbar-container .hamburger-lines {
-            display: block;
-        }
-
-        .navbar-container {
-            display: block;
-            position: relative;
-            height: 64px;
-        }
-
-        .navbar-container input[type="checkbox"] {
-            position: absolute;
-            display: block;
-            height: 32px;
-            width: 30px;
-            top: 20px;
-            left: 20px;
-            z-index: 5;
-            opacity: 0;
-            cursor: pointer;
-        }
-
-        .navbar-container .hamburger-lines {
-            display: block;
-            height: 28px;
-            width: 35px;
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .navbar-container .hamburger-lines .line {
-            display: block;
-            height: 4px;
-            width: 100%;
-            border-radius: 10px;
-            background: #333;
-        }
-
-        .navbar-container .hamburger-lines .line1 {
-            transform-origin: 0% 0%;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .navbar-container .hamburger-lines .line2 {
-            transition: transform 0.2s ease-in-out;
-        }
-
-        .navbar-container .hamburger-lines .line3 {
-            transform-origin: 0% 100%;
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .navbar .menu-items {
-            padding-top: 100px;
-            background: #fff;
-            height: 100vh;
-            max-width: 300px;
-            transform: translate(-150%);
-            display: flex;
-            flex-direction: column;
-            margin-left: -40px;
-            padding-left: 40px;
-            transition: transform 0.5s ease-in-out;
-            box-shadow: 5px 0px 10px 0px #aaa;
-            overflow: scroll;
-        }
-
-        .navbar .menu-items li {
-            margin-bottom: 1.8rem;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
-        .logo {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 2.5rem;
-        }
-
-        .navbar-container input[type="checkbox"]:checked~.menu-items {
-            transform: translateX(0);
-        }
-
-        .navbar-container input[type="checkbox"]:checked~.hamburger-lines .line1 {
-            transform: rotate(45deg);
-        }
-
-        .navbar-container input[type="checkbox"]:checked~.hamburger-lines .line2 {
-            transform: scaleY(0);
-        }
-
-        .navbar-container input[type="checkbox"]:checked~.hamburger-lines .line3 {
-            transform: rotate(-45deg);
-        }
-
-    }
-
-    @media (max-width: 500px) {
-        .navbar-container input[type="checkbox"]:checked~.logo {
-            display: none;
-        }
-    }
-    .icon-item {
-        position: relative;
-        margin-right: 10px;
-    }
-
-    .icon-item a {
-        text-decoration: none;
-        color: rgb(0, 0, 0);
-        font-size: 24px;
-        transition: color 0.3s;
-    }
-
-    .icon-item a:hover {
-        color: #007bff;
-    }
-
-    .notification-count {
-        position: absolute;
-        top: 30px;
-        right: auto;
-        color: #fff;
-        border-radius: 50%;
-        padding: 4px 8px;
-    }
-
-    .notification-container {
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 400px;
-        background-color: white;
-        border: 10px solid #ffffff;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        display: none;
-        z-index: 999;
-    }
-
-    .notification-message {
-        padding: 20px;
-    }
-
-    .notification-list {
-        list-style: none;
-        padding: 0;
-    }
-
-    .notification-list-item {
-        padding: 50px;
-        border-bottom: 5px solid #eee;
-    }
-
-    .notification-list-item:hover {
-        background-color: #0a9aa2;
-    }
-</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <nav class="navbar">
     <div class="navbar-container container">
         <input type="checkbox" name="yourCheckboxName" id="yourCheckboxId">
-        <h2 class="logo" id="logo">Hanwooplz</h2>
+        <a class="logo" href="{% url 'hanwooplz_app:index' %}">DevCommunity</a>
         <div class="hamburger-lines">
             <span class="line line1"></span>
             <span class="line line2"></span>
             <span class="line line3"></span>
         </div>
         <ul class="menu-items">
-            <li><a href="{% url 'hanwooplz_app:portfolio_list' %}">포트폴리오</a></li>
+            <li><a href="{% url 'hanwooplz_app:portfolio_list' %}">프로젝트</a></li>
             <li><a href="{% url 'hanwooplz_app:project_list' %}">팀원모집</a></li>
             <li><a href="{% url 'hanwooplz_app:question_list' %}">질의응답</a></li>
 
             {% if user.is_authenticated %}
-            <li><a href="{% url 'hanwooplz_app:chat' 0 user.id %}">채팅</a></li>
-            <li class="icon-item"><a href="{% url 'hanwooplz_app:myinfo' user.id %}"><i class="fas fa-user"></i></a>
+            <li><a href="{% url 'hanwooplz_app:chat' 0 request.user.id %}">채팅</a></li>
+            <li class="icon-item">
+                <a href="{% url 'hanwooplz_app:myinfo' request.user.id %}">
+                    <i class="fas fa-user"></i>
+                </a>
             </li>
             <li class="icon-item">
                 <a id="notificationButton" href="#"><i class="fas fa-bell"></i></a>
@@ -265,10 +31,17 @@
                 </div>
             </li>
 
-            <li class="icon-item"><a href="{% url 'hanwooplz_app:logout' %}"><i class="fas fa-sign-out-alt"></i></a>
+            <li class="icon-item">
+                <a href="{% url 'hanwooplz_app:logout' %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
             </li>
             {% else %}
-            <li class="icon-item"><a href="{% url 'hanwooplz_app:login' %}"><i class="fas fa-sign-in-alt"></i></a></li>
+            <li class="icon-item">
+                <a href="{% url 'hanwooplz_app:login' %}">
+                    <i class="fas fa-sign-in-alt"></i>
+                </a>
+            </li>
             {% endif %}
         </ul>
     </div>
@@ -278,7 +51,7 @@
         const logo = document.getElementById("logo");
 
         logo.addEventListener("click", function () {
-            window.location.href = "{% url 'hanwooplz_app:main' %}";
+            window.location.href = "{% url 'hanwooplz_app:index' %}";
         });
     });
 </script>
@@ -421,9 +194,9 @@
                             }
                         });
 
-                        senderlink.addEventListener("click", () => {
-                            if (notification.senderlink) {
-                                window.location.href = notification.senderlink;
+                        senderLink.addEventListener("click", () => {
+                            if (notification.senderLink) {
+                                window.location.href = notification.senderLink;
                             }
                         });
 

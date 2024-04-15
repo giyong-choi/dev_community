@@ -1,11 +1,11 @@
-import asyncio
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
-from .models import ChatMessages, ChatRoom, UserProfile
 from channels.db import database_sync_to_async
 from django.contrib.auth import get_user_model
-from django.db.models import Q
-from django.utils import timezone
+from .models import ChatMessage, ChatRoom, UserProfile
+from asgiref.sync import sync_to_async
+
+User = get_user_model()
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -20,29 +20,29 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Leave room group
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
-    @database_sync_to_async
+    @sync_to_async
     def get_room(self, room_number):
         return ChatRoom.objects.get(id=room_number)
 
-    @database_sync_to_async
+    @sync_to_async
     def get_sender(self, username):
         try:
             return UserProfile.objects.get(username=username)
         except UserProfile.DoesNotExist:
             return None
 
-    @database_sync_to_async
+    @sync_to_async
     def save_chat_message(self, room, sender, message, receiver, chat_uuid):
-        chat_msg = ChatMessages(chat_room=room, sender=sender, message=message, read_or_not=False, receiver=receiver, chat_uuid=chat_uuid)
+        chat_msg = ChatMessage(chat_room=room, sender=sender, message=message, read_or_not=False, receiver=receiver, chat_uuid=chat_uuid)
         chat_msg.save()
 
-    @database_sync_to_async
+    @sync_to_async
     def get_chat_message_and_read_check(self, chat_uuid, receiver):
         try:
-            chat_msg = ChatMessages.objects.get(chat_uuid=chat_uuid, receiver=receiver)
+            chat_msg = ChatMessage.objects.get(chat_uuid=chat_uuid, receiver=receiver)
             chat_msg.read_or_not = True
             chat_msg.save()
-        except ChatMessages.DoesNotExist:
+        except ChatMessage.DoesNotExist:
             pass
 
     # Receive message from WebSocket
@@ -63,7 +63,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             await self.save_chat_message(room, sender, message, receiver, chat_uuid)
 
-            # Send message to room group
+            # Publish message to Redis
             await self.channel_layer.group_send(
                 self.room_group_name, {
                     "type": "chat_message",
@@ -85,6 +85,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
             await self.get_chat_message_and_read_check(chat_uuid, receive_user)
 
+            # Publish message to Redis
             await self.channel_layer.group_send(
                 self.room_group_name, {
                     "type": "chat_message_read",
@@ -114,16 +115,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
         }))
     
     async def chat_message_read(self, event):
-        # 상대방에게 읽음 여부를 알리는 코드
+        # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'type': 'chat_message_read',
             "chat_uuid": event["chat_uuid"],
             'room_number': event['room_number'],
             "receiver": event["receiver"],
-            "is_read": True
+            'is_read': True
         }))
 
-User = get_user_model()
+
 class ChatListConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         if not self.scope.get('user') or self.scope['user'].is_anonymous:
@@ -152,13 +153,13 @@ class ChatListConsumer(AsyncWebsocketConsumer):
         latest_messages = []
         for room in chat_rooms:
             try:
-                unread_message_count = ChatMessages.objects.filter(
+                unread_message_count = ChatMessage.objects.filter(
                     Q(chat_room=room),
                     ~Q(sender=user),
                     Q(read_or_not=False)
                 ).count()
 
-                latest_message = ChatMessages.objects.filter(chat_room=room.id).latest('created_at')
+                latest_message = ChatMessage.objects.filter(chat_room=room.id).latest('created_at')
 
                 receiver = None
 
@@ -175,7 +176,7 @@ class ChatListConsumer(AsyncWebsocketConsumer):
                     'created_at': self.format_datetime(latest_message.created_at),
                     'unread_message_count': unread_message_count,
                 })
-            except ChatMessages.DoesNotExist:
+            except ChatMessage.DoesNotExist:
                 pass
 
         latest_messages.sort(key=lambda x: x['created_at'], reverse=True)

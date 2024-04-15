@@ -7,7 +7,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
-  <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'css/chat.css' %}" />
   <title>채팅하기</title>
 </head>
@@ -18,14 +17,14 @@
   <section class="container column">
     <div class="post-box flex-box">
       <div class="chat-select-container">
-        <div class="chat-list-box flex-box column" id="chat-list-box">
-          <p class="chat-list-title">채팅방 리스트</p>
+        <div class="chat-list-box" id="chat-list-box">
+          <p class="chat-list-title">채팅방 목록</p>
           {% for msg in latest_messages %}
-          <div class="chat-box between" onclick="redirectToChat({{ msg.chat_room_id }}, {{ msg.receiver_id }})" 
+          <div class="chat-box" onclick="redirectToChat({{ msg.chat_room_id }}, {{ msg.receiver_id }})" 
                data-chat-room-id="{{ msg.chat_room_id }}">
             <div class="flex-box">
-              <span class="bold">{{ msg.receiver }}</span>
-              <span class="s-text">{{ msg.created_at }}</span>
+              <span class="msg-receiver">{{ msg.receiver }}</span>
+              <span class="msg-date">{{ msg.created_at }}</span>
               {% if msg.unread_message_count > 0 %}
               <span class="unread_message_count">{{ msg.unread_message_count }}</span>
               {% endif %}
@@ -39,11 +38,12 @@
       </div>
       <div class="chat-main-container">
         {% if room_number > 0 or room_number == -1 %}
-        <div style="height:500px">
+        <div style="height: 80%;">
           <div class="contact-info flex-box" onclick="window.location.href= '{% url "hanwooplz_app:myinfo" user_id %}'">
             {% if username %}
               대화상대: {{ username }}
             {% endif %}
+            <span class="contact-info-detail">* 해당 유저페이지로 이동하려면 클릭하세요.</span>
           </div>
           <div class="chat-container" id="chat-log">
             {% if room_number == -1 %}
@@ -69,16 +69,14 @@
         <form class="chat-input" id="chat-form">
           {% csrf_token %}
           <textarea type="text" id="chat-message-input" name="message" cols="30" rows="10" placeholder="메세지를 입력해주세요"></textarea>
-          <div><button id="chat-message-submit" type="button">전송</button></div>
         </form>
+        <div style="display: flex; justify-content: flex-end;"><button id="chat-message-submit" type="button">전송</button></div>
         {% elif room_number == 0 %}
-        <!-- room_number가 0일 때 표시할 내용 -->
+        <h2 class="chat-empty-message" style="margin: 10px; font-weight: 400;">채팅방 목록에서 채팅방을 선택해 주세요.</h2>
         {% endif %}
       </div>
     </div>
   </section>
-  {% include 'footer.html' %}
-  {% include 'chatbot.html' %}
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 <script>
@@ -197,10 +195,6 @@
       
     }
 
-    
-
-  
-
     if (room_number > 0 || room_number == -1) {
       chatMessageSubmitBtn.addEventListener('click', function () {
         const message = messageInputDom.value;
@@ -260,7 +254,7 @@
     }
 
     window.location.href = `/chat/${chatRoomId}/${receiverId}`;
-}
+  }
 
 
   function isScrolledToBottom() {

@@ -1,0 +1,70 @@
+textarea{
+    resize: none;
+    height: 500px;
+    width: 100%;
+    border: none;
+  }
+  
+  body{
+    background-color: #f8f9fa;
+  }
+  
+  .main {
+    position: relative;
+    top: 70px;
+    display: flex;
+    flex-direction: column;
+    padding-top: 30px;
+    justify-content: center;
+    margin-bottom: 400px;
+    align-items: center;
+  }
+  
+  .main > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+  }
+  
+  .write-box {
+    gap: 10px;
+    border: none;
+    padding: 11px 0px;
+    outline: none;
+  }
+  
+  .save-button-wrapper {
+    display: flex;
+    width: 100%;
+    height: 25px;
+    justify-content: right;
+  }
+  
+  .temp-save-button {
+    appearance: none;
+    display: flex;
+    width: 100px;
+    height: 25px;
+    border: 1px solid #1e1e1e;
+    border-radius: 3px;
+    margin-right: 5px;
+    background-color: #f8f9fa;
+    justify-content: center;
+    color: #1e1e1e;
+    cursor: pointer;
+  }
+  
+  .save-button {
+    appearance: none;
+    display: flex;
+    width: 100px;
+    height: 25px;
+    border: 1px solid #1e1e1e;
+    border-radius: 3px;
+    background-color: #1e1e1e;
+    justify-content: center;
+    color: #f9f8f4;
+    cursor: pointer;
+  }
+  

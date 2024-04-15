@@ -1,30 +1,17 @@
-from django.db import models
-from django.conf import settings
 from django.contrib.auth.models import AbstractUser
-from django.contrib.postgres.fields import ArrayField
+from django.db import models
 from tinymce.models import HTMLField
 
-# Create your models here.
-
 class UserProfile(AbstractUser):
-    '''
-    User model-builtin column with AbstractUser class
-    - ID: username
-    - PW: password
-    - Email: email
-    '''
-    first_name = None
-    last_name = None
-    
-    # Custom column
-    full_name = models.CharField(max_length=6)
-    job = models.CharField(max_length=50)
-    tech_stack = ArrayField(models.CharField(max_length=20))
+    # Custom columns
+    full_name = models.CharField(max_length=100)
+    job = models.CharField(max_length=100)
+    tech_stack = models.CharField(max_length=200)
     career = models.IntegerField(default=0)
-    career_detail = models.TextField() # could be modified
+    career_detail = models.TextField()
     introduction = models.TextField()
-    github_link = models.URLField(blank=True,default='')
-    linkedin_link = models.URLField(blank=True,default='')
+    github_link = models.URLField(blank=True)
+    linkedin_link = models.URLField(blank=True)
     user_img = models.ImageField(upload_to="user_img", default=None, null=True)
 
 class Post(models.Model):
@@ -37,7 +24,7 @@ class PostPnP(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
-    tech_stack = ArrayField(models.CharField(max_length=20))
+    tech_stack = models.CharField(max_length=200)
     ext_link = models.URLField()
 
     class Meta:
@@ -47,18 +34,18 @@ class PostPortfolio(PostPnP):
     members = models.IntegerField(default=1)
 
 class PostProject(PostPnP):
-    status = models.IntegerField(default=1)
-    '''
-    - 모집중단: 0
-    - 모집중: 1
-    - 모집완료: 2
-    '''
+    RECRUIT_STATUS_CHOICES = (
+        (0, 'Recruitment Closed'),
+        (1, 'Recruitment Open'),
+        (2, 'Recruitment Completed'),
+    )
+    status = models.IntegerField(choices=RECRUIT_STATUS_CHOICES, default=1)
     members = models.ManyToManyField(UserProfile, through='ProjectMembers')
     target_members = models.IntegerField(default=1)
 
 class ProjectMembers(models.Model):
     project = models.ForeignKey(PostProject, on_delete=models.CASCADE)
-    members = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    member = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
 class PostQnA(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
@@ -67,50 +54,38 @@ class PostQnA(models.Model):
         abstract = True
 
 class PostQuestion(PostQnA):
-    keyword = ArrayField(models.CharField(max_length=20))
-    like = models.ManyToManyField(UserProfile, through="QuestionLike")
+    keyword = models.CharField(max_length=200)
+    likes = models.ManyToManyField(UserProfile, related_name='liked_questions', through='QuestionLike')
 
 class PostAnswer(PostQnA):
     question = models.ForeignKey(PostQuestion, on_delete=models.CASCADE)
-    like = models.ManyToManyField(UserProfile, through="AnswerLike")
+    likes = models.ManyToManyField(UserProfile, related_name='liked_answers', through='AnswerLike')
 
 class QuestionLike(models.Model):
     question = models.ForeignKey(PostQuestion, on_delete=models.CASCADE)
-    like = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
 class AnswerLike(models.Model):
     answer = models.ForeignKey(PostAnswer, on_delete=models.CASCADE)
-    like = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
-
-class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
-    author = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="comments_written")
-    content = models.TextField()
-    like = models.ManyToManyField(UserProfile, through="CommentLike")
-    created_at = models.DateTimeField(auto_now_add=True)
-
-class CommentLike(models.Model):
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE)
-    like = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE)
 
 class ChatRoom(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
-    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='buyer')
-    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='seller')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='sender')
+    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='receiver')
     created_at = models.DateTimeField(auto_now_add=True)
 
-class ChatMessages(models.Model):  
+class ChatMessage(models.Model):  
     chat_room = models.ForeignKey(ChatRoom, on_delete=models.CASCADE)
-    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='sender')
-    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='receiver')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='sent_messages')
+    receiver = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='received_messages')
     message = models.CharField(max_length=500)
-    read_or_not = models.BooleanField()
+    read_or_not = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     chat_uuid = models.UUIDField(editable=False, unique=True, null=True)
 
-class Notifications(models.Model):
-    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='user')
-    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,related_name='prj_sender')
+class Notification(models.Model):
+    user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True, related_name='notifications')
+    sender = models.ForeignKey(UserProfile, on_delete=models.CASCADE, null=True,related_name='notification_sender')
     post = models.ForeignKey(Post, on_delete=models.CASCADE, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     accept_or_not = models.BooleanField(null=True)

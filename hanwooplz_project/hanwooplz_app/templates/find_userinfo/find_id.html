@@ -56,10 +56,26 @@
         }
 
         button:hover {
-            background: #03e9f4;
-            color: #fff;
+            background: white;
+            color: black;
             border-radius: 5px;
-            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            box-shadow: 0 0 5px lightgray, 0 0 25px lightgray, 0 0 50px lightgray, 0 0 100px lightgray;
+        }
+
+        form {
+            animation: slideIn 1s ease-in-out;
+        }
+        
+        @keyframes slideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
     <title>아이디 찾기</title>
@@ -67,8 +83,6 @@
 
 <body>
     <form method="post">
-        <img id="animated-gif" src="{% static 'img/hanwoo1.gif' %}" alt="Animated GIF"
-            style="max-width: 100px; max-height: 100px;">
         {% csrf_token %}
         <label for="email">이메일:</label>
         <input type="email" id="email" name="email" required>

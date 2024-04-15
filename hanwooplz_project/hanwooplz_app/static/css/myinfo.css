@@ -1,3 +1,5 @@
+/* myinfo.css */
+
 :root {
     --bc: #ffffff;
     --bc-secondary: #ffffff;
@@ -17,12 +19,6 @@
     --font-poppins: "Poppins";
 }
 
-html,
-body {
-    margin: 0;
-    font-family: var(--font-main);
-}
-
 main {
     width: 100%;
     min-height: 100vh;
@@ -36,7 +32,6 @@ fieldset {
     padding: 0;
     border: none;
 }
-
 
 .flexbox {
     display: flex;
@@ -58,7 +53,6 @@ fieldset {
 
 .flexbox-col {
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
 }
@@ -70,15 +64,15 @@ fieldset {
     align-items: center;
 }
 
-
 .space {
     min-height: 100vh;
 }
 
 .profile-pic-wrapper {
     width: 14em;
-    height: 14em;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-pic {
@@ -87,7 +81,6 @@ fieldset {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
     border: 2px solid var(--black);
     border-radius: 50%;
     overflow: hidden;
@@ -95,13 +88,17 @@ fieldset {
     transition: all 0.3s ease;
 }
 
-.profile-pic img {
+.profile-pic > img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.profile-pic input[type="submit"] {
+.profile-pic:hover {
+    border-color: var(--black);
+}
+
+.profile-pic-wrapper > input[type="submit"] {
     display: block;
     background: var(--black);
     color: white;
@@ -109,13 +106,10 @@ fieldset {
     border: none;
     cursor: pointer;
     border-radius: 5px;
+    margin: 10px 0;
 }
 
-.profile-pic:hover {
-    border-color: var(--black);
-}
-
-.profile-pic input[type="submit"]:hover {
+.profile-pic-wrapper > input[type="submit"]:hover {
     background: var(--white);
     color: var(--black);
 }
@@ -127,7 +121,7 @@ fieldset {
     display: block;
 }
 
-.profile-pic-small img {
+.profile-pic-small > img {
     width: 100%;
     height: 100%;
 }
@@ -149,7 +143,7 @@ fieldset {
     opacity: 0;
 }
 
-.profile-pic-upload-input input {
+.profile-pic-upload-input > input {
     top: 0;
     left: 0;
     right: 0;
@@ -239,7 +233,7 @@ fieldset {
 .profile-top {
     width: 60%;
     height: 14em;
-    margin: 4em 0 8em 0;
+    margin: 130px 0;
     position: relative;
     display: grid;
     grid-template-columns: auto 1fr;
@@ -248,18 +242,29 @@ fieldset {
 
 .profile-left {
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-right {
-    height: 14em;
+    background-color: #fff; 
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: grid;
+    justify-content: left;
+    text-align: left;
+    overflow-y: scroll;
+    padding: 20px;
+    height: 330px;
 }
 
 .profile-right-top {
-    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .profile-right-bottom {
-    width: 100%;
+    width: 400%;
     height: 100%;
 }
 
@@ -278,7 +283,7 @@ fieldset {
     transition: color .25s ease-in-out;
 }
 
-.profile-bio span {
+.profile-bio > span {
     color: var(--blue-darker);
     cursor: pointer;
 }
@@ -306,7 +311,7 @@ fieldset {
     transition: all .25s ease-in-out;
 }
 
-.profile-page-block a {
+.profile-page-block > a {
     padding: 1.2em 1.4em;
     display: block;
     color: var(--gray-extra-dark);
@@ -315,7 +320,7 @@ fieldset {
     cursor: pointer;
 }
 
-.profile-page-block a i {
+.profile-page-block > a > i {
     margin: 0 .1em 0 0;
     color: var(--gray);
 }
@@ -333,6 +338,12 @@ fieldset {
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     grid-column-gap: 1em;
     grid-row-gap: 1em;
+}
+
+.profile-page-inner>p {
+    font-size: 25px;
+    text-align: center;
+    margin-top: 20px;
 }
 
 .image-wrapper {
@@ -375,185 +386,121 @@ fieldset {
     z-index: 9;
 }
 
-.image-wrapper img {
+.image-wrapper > img {
     width: 100%;
     height: 100%;
     position: absolute;
     object-fit: cover;
 }
 
-
-body.light main {
+body.light > main {
     background: var(--white);
 }
 
-
-body.light .profile-bio {
+body.light > .profile-bio {
     color: var(--black);
 }
 
-body.light .profile-name {
+body.light > .profile-name {
     color: var(--black);
 }
 
-body.light .profile-page-nav {
+body.light > .profile-page-nav {
     border-top: 2px solid var(--gray);
     border-bottom: 2px solid var(--white);
 }
 
-body.light .profile-page-block {
+body.light > .profile-page-block {
     color: var(--black);
 }
 
-body.light .profile-page-block a {
+body.light > .profile-page-block a {
     color: var(--black);
 }
 
-
-@media only screen and (max-width: 1660px) {}
+@media only screen and (max-width: 1660px) {
+    /* Add your custom styles for screens up to 1660px wide */
+}
 
 @media only screen and (max-width: 1456px) {
-    :root {
-        --heading-large: 7rem;
-    }
-
-    .profile-top {
-        width: 70%;
-    }
-
-    .profile-page {
-        width: 70%;
-    }
+    /* Add your custom styles for screens up to 1456px wide */
 }
 
 @media only screen and (max-width: 1024px) {
-    :root {
-        --heading-large: 6.5rem;
-    }
-
-    .profile-pic-wrapper {
-        width: 12em;
-        height: 12em;
-    }
-
-    .profile-pic-note {
-        font-size: calc(var(--paragraph) - .1rem);
-    }
-
-    .profile-top {
-        width: 75%;
-        grid-column-gap: 1.5em;
-    }
-
-    .profile-page {
-        width: 75%;
-    }
-
-    .profile-name {
-        font-size: calc(var(--heading) - 1rem);
-    }
-
-    .profile-bio-wrapper {
-        width: 75%;
-    }
-
-    .profile-page-inner {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .profile-header-uploader-inner {
-        padding: 4em 8em;
-    }
+    /* Add your custom styles for screens up to 1024px wide */
 }
 
 @media only screen and (max-width: 756px) {
-    :root {
-        --heading-large: 3.5rem;
-    }
-
-    .profile-pic-wrapper {
-        width: 10em;
-        height: 10em;
-    }
-
-    .profile-pic-note {
-        font-size: calc(var(--paragraph) - .2rem);
-    }
-
-    .profile-top {
-        width: 90%;
-        height: auto;
-        display: grid;
-        margin: 3em 0 2em 0;
-        grid-template-columns: auto;
-        grid-template-rows: auto auto;
-        grid-column-gap: 0;
-        grid-row-gap: 1em;
-    }
-
-    .profile-left {
-        height: 100%;
-    }
-
-    .profile-right {
-        width: 100%;
-        height: auto;
-        position: relative;
-    }
-
-    .profile-page {
-        width: 90%;
-    }
-
-    .profile-name {
-        font-size: calc(var(--heading) - 1.5rem);
-    }
-
-    .profile-bio-wrapper {
-        width: 90%;
-    }
-
-    .profile-bio {
-        font-size: calc(var(--paragraph) - .1rem);
-    }
-
-    .profile-page-block a {
-        padding: 1em 1.2em;
-        font-size: var(--paragraph);
-    }
-
-    .profile-header-uploader-inner {
-        padding: 4em 3em;
-    }
+    /* Add your custom styles for screens up to 756px wide */
 }
 
 @media only screen and (max-width: 496px) {
-    :root {
-        --heading-large: 2.5rem;
-    }
+    /* Add your custom styles for screens up to 496px wide */
+}
 
-    .profile-pic-wrapper {
-        width: 8em;
-        height: 8em;
-    }
+.button {
+    float: right;
+    text-align: center;
+}
 
-    .profile-pic-note {
-        font-size: calc(var(--paragraph) - .3rem);
-    }
+.button-gray {
+    border: 0px;
+    border-radius: 5px;
+    background-color: gray;
+    color: white;
+    font: 12px 굴림;
+    font-weight: bold;
+    width: 60px;
+    height: 30px;
+}
 
-    .profile-name {
-        font-size: calc(var(--heading) - 1.75rem);
-    }
+.button-black {
+    border: 0px;
+    border-radius: 5px;
+    background-color: rgb(46, 46, 46);
+    color: white;
+    font: 12px 굴림;
+    font-weight: bold;
+    width: 70px;
+    height: 30px;
+}
 
-    .profile-bio {
-        font-size: calc(var(--paragraph) - .2rem);
-    }
+.grid-item {
+    background-color: #f5f5f5;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
-    .profile-page-inner {
-        grid-template-rows: 1fr;
-    }
+.grid-item > a {
+    color: #333;
+    font-weight: bold;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
 
-    .profile-page-block a {
-        font-size: calc(var(--paragraph) - .2em);
-    }
+.grid-item > p {
+    margin: 0;
+    color: #777;
+    font-size: 14px;
+}
+
+.chat-button {
+    display: block;
+    background: var(--black);
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.chat-button:hover {
+    background: var(--white);
+    color: var(--black);
 }

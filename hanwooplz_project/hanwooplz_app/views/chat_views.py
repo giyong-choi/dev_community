@@ -1,11 +1,13 @@
-from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required
-from django.http import JsonResponse
 from ..forms import *
 from ..models import *
 from ..serializers import *
-from django.utils import timezone
+
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+
 
 def format_datetime(dt):
     today = timezone.now().date()
@@ -23,13 +25,13 @@ def get_rooms(request):
     latest_messages = []
     for room in chat_rooms:
         try:
-            unread_message_count = ChatMessages.objects.filter(
+            unread_message_count = ChatMessage.objects.filter(
                 Q(chat_room=room),
                 ~Q(sender=request.user),
                 Q(read_or_not=False)
             ).count()
 
-            latest_message = ChatMessages.objects.filter(chat_room=room.id).latest('created_at')
+            latest_message = ChatMessage.objects.filter(chat_room=room.id).latest('created_at')
 
             receiver = None
 
@@ -47,7 +49,7 @@ def get_rooms(request):
                 'created_at': format_datetime(latest_message.created_at),
                 'unread_message_count': unread_message_count,
             })
-        except ChatMessages.DoesNotExist:
+        except ChatMessage.DoesNotExist:
             pass
 
     latest_messages.sort(key=lambda x: x['created_at'], reverse=True)
@@ -68,7 +70,7 @@ def current_chat(request, room_number, receiver_id):
         elif already_room.exists():
             current_room = already_room.first()
             room_number = current_room.id
-            current_chat = ChatMessages.objects.filter(chat_room=current_room).order_by('created_at')     
+            current_chat = ChatMessage.objects.filter(chat_room=current_room).order_by('created_at')     
             
 
             for i, chat in enumerate(current_chat):
@@ -94,7 +96,7 @@ def current_chat(request, room_number, receiver_id):
             room_number = new_chat_room.id
     else:
         current_room = ChatRoom.objects.get(pk=room_number)
-        current_chat = ChatMessages.objects.filter(chat_room=current_room).order_by('created_at')     
+        current_chat = ChatMessage.objects.filter(chat_room=current_room).order_by('created_at')     
         
 
         for i, chat in enumerate(current_chat):
@@ -131,14 +133,14 @@ def chat_msg(request, room_number):
 
     current_time = timezone.now()
     three_days_ago = current_time - timezone.timedelta(days=3)
-    chat_msgs = ChatMessages.objects.filter(chat_room=room, created_at__gte=three_days_ago).order_by('-created_at')
+    chat_msgs = ChatMessage.objects.filter(chat_room=room, created_at__gte=three_days_ago).order_by('-created_at')
 
     created_at = format_datetime(chat_msg.created_at)
 
     if request.method == 'POST':
         chatInput = request.POST.get('chat-send-msg')
         sender = request.user
-        chat_msg = ChatMessages(chat_room=room, sender=sender, message=chatInput, read_or_not=False)
+        chat_msg = ChatMessage(chat_room=room, sender=sender, message=chatInput, read_or_not=False)
         chat_msg.save()
 
         response_data = {

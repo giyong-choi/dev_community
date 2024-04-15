@@ -1,5 +1,5 @@
 body {
-    background-color: #333;
+    background-color: white;
     color: white;
     font-family: Arial, sans-serif;
     display: flex;
@@ -10,15 +10,25 @@ body {
 }
 
 .login-container {
-    background-color: rgba(0, 0, 0, 0.5);
-    padding: 100px;
-    border-radius: 20px;
-    text-align: center;
-    position: relative;
+    background-color: rgba(255, 255, 255, 0.817);
+    padding: 200px;
+    border-radius: 50px;
+    text-align: left;
+    margin-top: 300px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
 .login-container h1 {
-    text-shadow: 0 0 20px rgba(0, 0, 255, 0.8);
+    color: black;
+}
+
+.login-form .form-group {
+    margin-bottom: 15px;
+}
+
+.login-form label {
+    display: block;
+    color: black;
 }
 
 .login-buttons {
@@ -29,19 +39,18 @@ body {
 }
 
 .login-form input[type="text"],
-.login-form input[type="password"] {
-    background-color: rgba(255, 255, 255, 0.1);
+.login-form input[type="password"],
+.login-form input[type="email"] {
+    background-color: rgba(0, 0, 0, 0.1);
     border: none;
     padding: 10px;
     border-radius: 5px;
-    color: white;
+    color: black;
     width: 100%;
-    margin: 5px 0;
-    text-align: center;
 }
 
 .login-form input[type="submit"] {
-    background: #03e9f4;
+    background: black;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -49,14 +58,17 @@ body {
     cursor: pointer;
     width: 100%;
     position: relative;
+    animation: scaleUp 0.5s ease-in-out;
+    margin-top: 50px;
 }
 
 .login-form input[type="submit"]:hover {
-    background: #02f2ff;
-    color: #fff;
+    background: white;
+    color: black;
     border-radius: 5px;
-    box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+    box-shadow: 0 0 5px lightgray, 0 0 25px lightgray, 0 0 50px lightgray, 0 0 100px lightgray;
 }
+
 
 .login-form input[type="submit"]::before {
     content: "";

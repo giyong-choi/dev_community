@@ -7,18 +7,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/posts_list.css' %}" />
-
-    <title>질의응답</title>
+    <title>{{ board_name }}</title>
 </head>
 
 <body>
     {% include 'nav.html' %}
-    <article style="padding: 100px;">
-        <div class="posts-list">
-            <h2>질의응답</h2>
-            <div class="aside"></div>
+    <main>
+        <div class="post-list">
+            <h2>{{ board_name }}</h2>
             <div class="select-group">
                 <form method="GET" action="" id="search-form">
                     <span class="select-text">SELECT</span>
@@ -36,10 +33,11 @@
             <table class="board-table">
                 <thead>
                     <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성 일시</th>
+                        <th class="board-no">번호</th>
+                        <th class="board-title">제목</th>
+                        <th class="board-keyword">키워드</th>
+                        <th class="board-author">작성자</th>
+                        <th class="board-date">작성 일시</th>
                     </tr>
                 </thead>
 
@@ -52,6 +50,7 @@
                                 {{ post.title }}
                             </a>
                         </td>
+                        <td>{{ post.keywords.0 }}</td>
                         <td>
                             <a href="{% url 'hanwooplz_app:myinfo' post.author_id %}">
                                 {{ post.author }}
@@ -62,7 +61,6 @@
                     {% endfor %}
                 </tbody>
             </table>
-
             <div class="page">
             {% if page_obj.has_previous %}
                 {% if query %}
@@ -113,9 +111,7 @@
                 {% endif %}
             </div>
         </div>
-    </article>
-    {% include 'footer.html' %}
-    {% include 'chatbot.html' %}
+    </main>
 </body>
 <script>
     document.getElementById('search-select').addEventListener('change', function() {
@@ -133,7 +129,7 @@
     });
     document.addEventListener("DOMContentLoaded", function() {
         var searchType = new URLSearchParams(window.location.search).get('search_type');
-        var titleElement = document.querySelector('.posts-list h2');
+        var titleElement = document.querySelector('.post-list h2');
         if (searchType === 'title_content') {
             titleElement.textContent = '질의응답: 제목+내용 검색결과';
         } else if (searchType === 'writer') {

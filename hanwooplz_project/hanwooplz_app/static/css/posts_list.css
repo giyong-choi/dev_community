@@ -1,7 +1,21 @@
 /* style.css */
 body {
     display: block;
+    animation: slideIn 1s ease-in-out;
+    }
+    
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
+
 
 a {
     text-decoration: none;
@@ -10,11 +24,6 @@ a {
 
 .navbar {
     top: 0;
-}
-
-h2 {
-    padding-bottom: 10px;
-    border-bottom: 1px solid gray;
 }
 
 .aside {
@@ -94,6 +103,34 @@ table.board-table {
     text-align: left;
 }
 
+.board-no {
+    width: 7%;
+}
+
+.board-title {
+    width: auto;
+}
+
+.board-skill {
+    width: 7%;
+}
+
+.board-status {
+    width: 10%;
+}
+
+.board-keyword {
+    width: 7%;
+}
+
+.board-author {
+    width: 7%;
+}
+
+.board-date {
+    width: 20%;
+}
+
 .page {
     text-align: center;
     padding: 20px;
@@ -137,7 +174,7 @@ table.board-table {
 main {
     width: 100%;
     margin-top: 64px;
-    margin-bottom: 96px;
+    margin-bottom: 30px;
 }
 
 .post-list {

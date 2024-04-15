@@ -1,4 +1,5 @@
-{% load static%}
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,19 +7,16 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/posts_list.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}" />
-    
-    <title>포트폴리오</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/posts_list.css' %}" />
+    <title>{{ board_name }}</title>
 </head>
 
 <body>
     {% include 'nav.html' %}
-    <article style="padding: 100px;">
-        <div class="posts-list">
-            <h2>포트폴리오</h2>
-            {% comment %} <div class="aside"></div> {% endcomment %}
+    <main>
+        <div class="post-list">
+            <h2>{{ board_name }}</h2>
             <div class="select-group">
                 <form method="GET" action="" id="search-form">
                     <span class="select-text">SELECT</span>
@@ -26,25 +24,26 @@
                         <select class="select-dropbox" id="search-select" name="search_type">
                             <option value="title_content">제목+내용</option>
                             <option value="writer">작성자</option>
-                        </select>                        
+                        </select>
                     </span>
                     <input type="text" name="search" class="select-textbox">
                     <input type="submit" class="button-black" value="검색" />
-                </form>                          
+                </form>
             </div>
-            {% if portfolio_lists %}
+            {% if post_lists %}
             <table class="board-table">
                 <thead>
                     <tr>
-                        <th>번호</th>
-                        <th>제목</th>
-                        <th>작성자</th>
-                        <th>작성 일시</th>
+                        <th class="board-no">번호</th>
+                        <th class="board-title">제목</th>
+                        <th class="board-skill">기술 스택</th>
+                        <th class="board-author">작성자</th>
+                        <th class="board-date">작성 일시</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% for post in portfolio_lists %}
+                    {% for post in post_lists %}
                     <tr>
                         <td>{{ post.post_portfolio }}</td>
                         <td>
@@ -53,8 +52,11 @@
                             </a>
                         </td>
                         <td>
+                            {{ post.tech_stacks.0 }}
+                        </td>
+                        <td>
                             <a href="{% url 'hanwooplz_app:myinfo' post.author_id %}">
-                                {{ post.author}}
+                                {{ post.author }}
                             </a>
                         </td>
                         <td>{{ post.created_at }}</td>
@@ -62,29 +64,59 @@
                     {% endfor %}
                 </tbody>
             </table>
-
             <div class="page">
-                <span><a href="#!">◀ 이전</a></span>
-                <span><a href="#!">1</a></span>
-                <span><a href="#!">다음 ▶</a></span>
+                {% if page_obj.has_previous %}
+                    {% if query %}
+                    <span><a href="?page={{ page_obj.previous_page_number }}&search_type={{ search_type }}&search={{ query }}">◀ 이전</a></span>
+                    {% else %}
+                    <span><a href="?page={{ page_obj.previous_page_number }}">◀ 이전</a></span>
+                    {% endif %}
+                {% else %}
+                    <span><a href="javascript:void(0)" tabindex="-1">◀ 이전</a></span>
+                {% endif %}
+                {% for page_number in page_obj.paginator.page_range %}
+                    {% if page_number == page_obj.number %}
+                        {% if query %}
+                        <span><a href="?page={{ page_number }}&search_type={{ search_type }}&search={{ query }} "><b>{{ page_number }}</b></a></span>
+                        {% else %}
+                        <span><a href="?page={{ page_number }}"><b>{{ page_number }}</b></a></span>
+                        {% endif %}
+                    {% else %}
+                        {% if query %}
+                        <span><a href="?page={{ page_number }}&search_type={{ search_type }}&search={{ query }}">{{ page_number }}</a></span>
+                        {% else %}
+                        <span><a href="?page={{ page_number }}">{{ page_number }}</a></span>
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    {% if query %}
+                    <span><a href="?page={{ page_obj.next_page_number }}&search_type={{ search_type }}&search={{ query }}">다음 ▶</a></span>
+                    {% else %}
+                    <span><a href="?page={{ page_obj.next_page_number }}">다음 ▶</a></span>
+                    {% endif %}
+                {% else %}
+                    <span><a href="javascript:void(0)" tabindex="-1" aria-disabled="true">다음 ▶</a></span>
+                {% endif %}
             </div>
             {% else %}
             <div class="no-results">검색 결과가 없습니다.</div>
             {% endif %}
             <div class="button">
                 {% if user.is_authenticated %}
-                <button class="button-black" onclick="window.location.href = '{% url "hanwooplz_app:write_question" %}'" style = 'cursor: pointer; transition: background-color 0.3s;'>
+                <button class="button-black" onclick="window.location.href = '{% url "hanwooplz_app:write_portfolio" %}'" style='cursor: pointer; transition: background-color 0.3s;'>
                     글쓰기
                 </button>
                 {% else %}
-                <button class="button-black" onclick="alert('로그인이 필요합니다.')">글쓰기</button>
+                <button class="button-black" onclick="alert('로그인이 필요합니다.')">
+                    글쓰기
+                </button>
                 {% endif %}
             </div>
         </div>
-    </article>
-    {% include 'footer.html' %}
-    {% include 'chatbot.html' %}
+    </main>
 </body>
+
 <script>
     document.getElementById('search-select').addEventListener('change', function() {
         var selectedOption = this.value;
@@ -99,9 +131,10 @@
         }
         document.getElementById('search-form').action = newURL;
     });
+
     document.addEventListener("DOMContentLoaded", function() {
         var searchType = new URLSearchParams(window.location.search).get('search_type');
-        var titleElement = document.querySelector('.posts-list h2');
+        var titleElement = document.querySelector('.post-list h2');
         if (searchType === 'title_content') {
             titleElement.textContent = '포트폴리오: 제목+내용 검색결과';
         } else if (searchType === 'writer') {
@@ -109,4 +142,5 @@
         }
     });
 </script>
+
 </html>

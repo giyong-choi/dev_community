@@ -24,7 +24,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRETS_DIR = BASE_DIR / 'hanwooplz_project'
 secrets = json.load(open(os.path.join(SECRETS_DIR, 'secrets.json')))
 SECRET_KEY = secrets['SECRET_KEY']
-OPENAI_KEY = secrets['OPENAI_API_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,7 +46,11 @@ INSTALLED_APPS = [
     'tinymce',
     'channels',
     'channels_redis',
+    # 'django_elasticsearch_dsl',
 ]
+
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
 
 ASGI_APPLICATION = "hanwooplz_project.asgi.application"
 
@@ -56,7 +59,7 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [(REDIS_HOST, REDIS_PORT)],
         },
     },
 }
