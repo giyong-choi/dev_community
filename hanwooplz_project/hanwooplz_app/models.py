@@ -25,7 +25,7 @@ class PostPnP(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     tech_stack = models.CharField(max_length=200)
-    ext_link = models.URLField()
+    ext_link = models.URLField(blank=True, null=True)
 
     class Meta:
         abstract = True
