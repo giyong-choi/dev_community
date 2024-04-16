@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}" />
-
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
     <title>로그인</title>
 </head>
 <body>
@@ -16,7 +16,7 @@
             <form method="post" class="login-form">
                 {% csrf_token %}
                 {{ form.as_p }}
-                <input style="margin-left: 10px;" type="submit" value="로그인">
+                <input type="submit" value="로그인">
             </form>
             <div class="login-buttons">
                 <a href="{% url 'hanwooplz_app:register' %}">회원가입</a>

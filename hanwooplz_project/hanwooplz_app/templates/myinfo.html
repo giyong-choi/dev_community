@@ -31,11 +31,11 @@
                     {% if user_id == request.user.id %}
                     <input type="submit" value="프로필 업데이트" onclick="window.location.href = '{% url "hanwooplz_app:edit_profile" %}'">
                     {% endif %}
-                    {% if user.is_authenticated and user_id != request.user.id %}
+                    {% if request.user.is_authenticated and user_id != request.user.id %}
                     <button class="chat-button" onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 user_id %}'">
                         채팅하기
                     </button>
-                    {% elif not user.is_authenticated %}
+                    {% elif not request.user.is_authenticated %}
                     <button class="chat-button" onclick="alert('로그인이 필요합니다.')">
                         채팅하기
                     </button>
