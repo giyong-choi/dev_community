@@ -22,17 +22,19 @@
                         <div class="tech-stack">#{{ tech_stack }} </div>
                     {% endfor %}
                 </div>
+                {% if ext_link %}
                 <div class="ext_link">외부 링크: <a href="{{ ext_link }}">{{ ext_link }}</a></div>
+                {% endif %}
                 <div class="content">{{ content | safe }}</div>
                 <div class="subsidiary">
                     <div class="card">
                         작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong> 님</a>
-                        {% if user.is_authenticated and author_id != request.user.id %}
-                        <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 author_id %}'" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
+                        {% if request.user.is_authenticated and author_id != request.user.id %}
+                        <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 author_id %}'" class="action-buttons">
                             채팅하기
                         </button>
-                        {% elif not user.is_authenticated %}
-                        <button onclick="alert('로그인이 필요합니다.')" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
+                        {% elif not request.user.is_authenticated %}
+                        <button onclick="alert('로그인이 필요합니다.')" class="action-buttons">
                             채팅하기
                         </button>
                         {% endif %}
