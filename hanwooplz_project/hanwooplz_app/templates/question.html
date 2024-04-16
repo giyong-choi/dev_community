@@ -22,7 +22,10 @@
                     <div class="keyword">#{{ keyword }} </div>
                     {% endfor %}
                 </div>
-                <div class="content">{{ content | safe }}</div>
+                <div class="content-box">
+                    <div class="content-title">내용</div>
+                    <div class="content">{{ content | safe }}</div>
+                </div>
                 <div class="subsidiary">
                     <div class="card">
                         <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong></a></p>
@@ -57,7 +60,7 @@
                     <div class="content">{{ answer.content | safe }}</div>
                     <div class="subsidiary">
                         <div class="card">
-                            <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong></a></p>
+                            <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' answer.author_id %}"><strong>{{ answer.username }}</strong></a></p>
                             <p>작성 일시: {{ answer.created_at }}</p>
                             {% if request.user.is_authenticated and answer.author_id != request.user.id %}
                             <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 answer.author_id %}'" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
