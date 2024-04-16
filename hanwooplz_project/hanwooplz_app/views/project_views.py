@@ -121,7 +121,12 @@ def write_project(request, post_project_id=None):
             return redirect('hanwooplz_app:project_list')
         
         request.POST._mutable = True
-        request.POST['tech_stack'] = request.POST.get('tech_stack').split()
+        
+        tech_stack = request.POST.get('tech_stack')
+        if tech_stack:
+            tech_stack_lower = ' '.join(tech_stack.split()).lower()
+            request.POST['tech_stack'] = tech_stack_lower
+            
         post_form = PostForm(request.POST, request.FILES, instance=post)
         post_project_form = PostProjectForm(request.POST, request.FILES, instance=post_project)
 

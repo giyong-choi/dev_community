@@ -8,6 +8,7 @@
         <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
         <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'css/index.css' %}" />
+        <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
         <title>DevCommunity</title>
 </head>
 
@@ -38,6 +39,7 @@
                 });
                 jQuery.get("{% url 'hanwooplz_app:project_list' %}", function (data) {
                         jQuery("#project-section").html(data);
+                        jQuery("#project-section .tab-container").remove();
                         jQuery("#project-section .navbar").remove();
                         jQuery("#project-section .select-group").remove();
                         jQuery("#project-section .page").remove();
