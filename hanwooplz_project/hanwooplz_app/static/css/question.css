@@ -3,12 +3,16 @@
     justify-content: center;
     align-items: center;
     width: 100%;
+    height: auto;
     max-width: 600px;
     margin: 0 auto;
+    padding: 10px 0;
 }
 
 main {
     width: 100%;
+    max-width: 600px;
+    height: 100%;
 }
 
 .question-container {
@@ -20,15 +24,23 @@ main {
     text-align: center;
     transition: transform 0.3s;
     margin: 70px 0px 0px 0px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
 }
 
 .question-container:hover {
-    transform: scale(1.05);
+    transform: scale(1);
 }
 
 .title {
     font-size: 24px;
     color: #3498db;
+    font-size: 36px;
+    height: inherit;
+    line-height: normal;
 }
 
 .keyword-conatiner {
@@ -49,6 +61,13 @@ main {
     font-size: 16px;
     margin-top: 20px;
     color: #333;
+    background-color: #eaeaea;
+    padding: 5px;
+    display: block;
+    align-items: center;
+    border-radius: 8px;
+    line-height: normal;
+    width: 100%;
 }
 
 .subsidiary {
@@ -65,6 +84,23 @@ main {
     border-radius: 5px;
     padding: 10px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.card button {
+    display: block;
+    margin: 0 auto;
+    background-color: #0077b5;
+    color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 100%;
 }
 
 .action-buttons {
@@ -139,4 +175,8 @@ main {
 
 #comment-wrapper {
     display: none;
+}
+
+a:hover {
+    cursor: pointer;
 }

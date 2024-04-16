@@ -28,7 +28,8 @@
                 <div class="content">{{ content | safe }}</div>
                 <div class="subsidiary">
                     <div class="card">
-                        작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong> 님</a>
+                        <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong></a></p>
+                        <p>작성 일시: {{ created_at }}</p>
                         {% if request.user.is_authenticated and author_id != request.user.id %}
                         <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 author_id %}'" class="action-buttons">
                             채팅하기
@@ -38,7 +39,6 @@
                             채팅하기
                         </button>
                         {% endif %}
-                        <p>작성 일시: {{ created_at }}</p>
                     </div>
                 </div>
             </div>

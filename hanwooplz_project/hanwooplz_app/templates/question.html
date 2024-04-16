@@ -8,156 +8,6 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/question.css' %}">
     <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
-    <style>
-        picture {
-            width: 100%;
-            background-color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-        }
-        
-        picture img {
-            width: 100%;
-            /* height: 150px; */
-            object-fit: contain;
-            background-color: white;
-        }
-        
-        #deprecated {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            z-index: 1;
-            background-color: #777;
-            opacity: 0.7;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-            font-size: 48px;
-        }
-        
-        .main-container {
-            padding-top: 70px;
-            padding-bottom: 20px;
-            height: auto;
-        }
-        
-        main {
-            width: 100%;
-            max-width: 600px;
-            height: 100%;
-        }
-        
-        .question-container {
-            max-width: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            gap: 10px;
-        }
-        
-        .question-container:hover {
-            transform: scale(1);
-        }
-        
-        .title {
-            font-size: 36px;
-            height: inherit;
-            line-height: normal;
-        }
-        
-        .info-box,
-        .content-box {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-        }
-        
-        .info-title,
-        .content-title {
-            color: #777;
-        }
-        
-        .info-content,
-        .content {
-            font-size: large;
-            background-color: #eaeaea;
-            padding: 5px;
-            display: block;
-            align-items: center;
-            border-radius: 8px;
-            line-height: normal;
-        }
-        
-        .content-box {
-            width: 100%;
-        }
-        
-        .content {
-            width: 100%;
-            margin-top: 0px;
-        }
-        
-        .card {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-        
-        .card button {
-            display: block;
-            margin: 0 auto;
-            background-color: #0077b5;
-            color: #fff;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            width: 100%;
-        }
-        
-        #status-form {
-            height: inherit;
-        }
-        
-        #status-select {
-            width: 85px;
-            height: inherit;
-            border: 0px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding-left: 5px;
-        }
-        .title-box {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 20px;
-            height: 36px;
-            width: 100%;
-        }
-        .project-status {
-            width: 85px;
-            height: 100%;
-            border-radius: 8px;
-            background-color: #0077b5;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        a:hover {
-            cursor: pointer;
-        }
-    </style>
     <title>{{ title }}</title>
 </head>
 
@@ -175,17 +25,17 @@
                 <div class="content">{{ content | safe }}</div>
                 <div class="subsidiary">
                     <div class="card">
-                        작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong> 님</a>
-                        {% if user.is_authenticated and author_id != request.user.id %}
+                        <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong></a></p>
+                        <p>작성 일시: {{ created_at }}</p>
+                        {% if request.user.is_authenticated and author_id != request.user.id %}
                         <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 author_id %}'" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
                             채팅하기
                         </button>
-                        {% elif not user.is_authenticated %}
+                        {% elif not request.user.is_authenticated %}
                         <button onclick="alert('로그인이 필요합니다.')" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
                             채팅하기
                         </button>
                         {% endif %}
-                        <p>작성 일시: {{ created_at }}</p>
                     </div>
                 </div>
                 <div class="action-buttons">
@@ -207,17 +57,17 @@
                     <div class="content">{{ answer.content | safe }}</div>
                     <div class="subsidiary">
                         <div class="card">
-                            작성자: <a href="{% url 'hanwooplz_app:myinfo' answer.author_id %}"><strong>{{ answer.username }}</strong> 님</a>
-                            {% if user.is_authenticated and answer.author_id != request.user.id %}
+                            <p>작성자: <a href="{% url 'hanwooplz_app:myinfo' author_id %}"><strong>{{ author }}</strong></a></p>
+                            <p>작성 일시: {{ answer.created_at }}</p>
+                            {% if request.user.is_authenticated and answer.author_id != request.user.id %}
                             <button onclick="window.location.href = '{% url "hanwooplz_app:chat" 0 answer.author_id %}'" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
                                 채팅하기
                             </button>
-                            {% elif not user.is_authenticated %}
+                            {% elif not request.user.is_authenticated %}
                             <button onclick="alert('로그인이 필요합니다.')" style="display: block; margin: 0 auto; background-color: #0077b5; color: #fff; border: none; padding: 6px 12px; border-radius: 4px; font-size: 14px; cursor: pointer; transition: background-color 0.3s;">
                                 채팅하기
                             </button>
                             {% endif %}
-                            <p>작성 일시: {{ answer.created_at }}</p>
                         </div>
                     </div>
                     <div class="action-buttons">
