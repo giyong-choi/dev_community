@@ -169,13 +169,11 @@ main {
     color: #777;
 }
 
-.info-content,
-.content {
+.info-content {
     font-size: large;
     background-color: #eaeaea;
     padding: 5px;
     display: block;
-    align-items: center;
     border-radius: 8px;
     line-height: normal;
 }
@@ -192,6 +190,10 @@ main {
     display: flex;
     align-items: flex-start;
     padding: 15px;
+    line-height: normal;
+    font-size: large;
+    background-color: #eaeaea;
+    border-radius: 8px;
 }
 
 .card button {

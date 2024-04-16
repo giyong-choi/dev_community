@@ -57,17 +57,29 @@ main {
     display: inline-block;
 }
 
-.content {
-    font-size: 16px;
-    margin-top: 20px;
-    color: #333;
-    background-color: #eaeaea;
-    padding: 5px;
-    display: block;
-    align-items: center;
-    border-radius: 8px;
-    line-height: normal;
+.content-box {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
     width: 100%;
+}
+
+.content-title {
+    color: #777;
+}
+
+.content {
+    width: 100%;
+    margin-top: 0px;
+    min-height: 200px;
+    color: #333;
+    display: flex;
+    align-items: flex-start;
+    padding: 15px;
+    line-height: normal;
+    font-size: large;
+    background-color: #eaeaea;
+    border-radius: 8px;
 }
 
 .subsidiary {
