@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/myinfo.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <title>내 정보</title>
 </head>
@@ -69,11 +70,13 @@
                 </div>
             </div>
             <div class="profile-right">
-                <div class="profile-right-top" style="text-align: left;">
-                    <h3 class="profile-name" style="font-size: 24px; color: #000000;">{{ username }}       {{ full_name }}  {{ job }}</h3>
+                <div class="profile-right-top">
+                    <h1 class="profile-name" >{{ full_name }}</h1>
+                    <span class="profile-name" style="font-size: 30px; ">{{ username }}</span>
                 </div>
                 <div class="profile-right-bottom"
                     style="display: flex; flex-direction: column; justify-content: left; align-items: left; text-align: left;">
+                    <span class="profile-name" style="margin-top: 10px; font-size: 16px; color: #000000;">직무: {{ job }}</span>
                     <div class="profile-bio-wrapper"
                         style="display: grid; justify-content: left; text-align: left; margin-top: 10px; text-align: left;">
                         <div style="margin-bottom: 10px; display: grid; justify-content: left; text-align: left;">

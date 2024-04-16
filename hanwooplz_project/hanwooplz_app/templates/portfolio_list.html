@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'css/posts_list.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
     <title>{{ board_name }}</title>
 </head>
 
@@ -100,7 +101,7 @@
                 {% endif %}
             </div>
             {% else %}
-            <div class="no-results">검색 결과가 없습니다.</div>
+            <div class="no-results">게시물이 없습니다.</div>
             {% endif %}
             <div class="button">
                 {% if user.is_authenticated %}

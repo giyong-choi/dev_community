@@ -1,6 +1,20 @@
 body{
     background-color: #f8f9fa;
+    animation: slideIn 1s ease-in-out;
 }
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 
 
 .post-box{
@@ -34,7 +48,7 @@ button:hover{
     width: 30%;
     background-color: #fff;
     border-right: 1px solid #e2e2e2;
-    margin-top: 70px;
+    margin-top: 10px;
 }
 
 .chat-list-box{
@@ -69,7 +83,7 @@ button:hover{
     flex-direction: column;
     justify-content: center;
     position: relative;
-    margin-top: 70px;
+    margin-top: 10px;
 }
 
 .chat-info{

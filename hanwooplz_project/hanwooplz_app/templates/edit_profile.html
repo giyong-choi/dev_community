@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="{% static 'css/register.css' %}" />
+    <link rel="icon" type="image/png" href="{% static 'img/favicon.ico' %}">
     <title>Edit Profile</title>
     <style>
         body {
@@ -30,7 +31,6 @@
 
         .profile-container h1 {
             color: black;
-            text-shadow: 0 0 20px rgba(0, 0, 255, 0.8);
         }
 
         .login-form .form-group {
@@ -80,17 +80,17 @@
         }
 
         .login-form input[type="submit"]:hover {
-            background: #02f2ff;
-            color: #fff;
+            background: white;
+            color: black;
             border-radius: 5px;
-            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            box-shadow: 0 0 5px white, 0 0 25px white, 0 0 50px white, 0 0 100px white;
         }
 
         .login-form input[type="button"]:hover {
-            background: #02f2ff;
-            color: #fff;
+            background: white;
+            color: black;
             border-radius: 5px;
-            box-shadow: 0 0 5px #03e9f4, 0 0 25px #03e9f4, 0 0 50px #03e9f4, 0 0 100px #03e9f4;
+            box-shadow: 0 0 5px white, 0 0 25px white, 0 0 50px white, 0 0 100px white;
         }
 
         .login-form input[type="submit"]::before {
@@ -171,7 +171,7 @@
 </head>
 
 <body>
-    <div class="main-container">
+    <div class="main-container" style="width: 40%;">
         <div class="profile-container">
             <h1>Edit Profile</h1>
             <form method="post" class="login-form" enctype="multipart/form-data">
@@ -179,7 +179,7 @@
                 <div class="form-group">
                     <label for="{{ form.user_img.id_for_label }}">기존 프로필 이미지:</label>
                     {% if user.user_img %}
-                        <img src="{{ user.user_img.url }}" alt="Profile Image" class="current-profile-image">
+                        <img src="{{ user.user_img.url }}" alt="Profile Image" class="current-profile-image" style="width: 30%;">
                     {% else %}
                         <img src="{% static 'img/basicuser.png' %}" alt="Default Profile Image" class="default-profile-image">
                     {% endif %}
@@ -228,7 +228,7 @@
                     <label for="{{ form.linkedin_link.id_for_label }}">LinkedIn 링크:</label>
                     {{ form.linkedin_link }}
                 </div>
-                <input type="submit" value="Update Profile">
+                <input type="submit" value="수정 완료">
                 <input type="button" value="비밀번호 변경하기" onclick="window.location.href='{% url "hanwooplz_app:change_password" %}'">
             </form>
         </div>
