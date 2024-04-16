@@ -20,7 +20,7 @@
             <h2>{{ board_name }}</h2>
             <div class="select-group">
                 <form method="GET" action="" id="search-form">
-                    <span class="select-text">SELECT</span>
+                    <span class="select-text">SEARCH</span>
                     <span>
                         <select class="select-dropbox" id="search-select" name="search_type">
                             <option value="title_content">제목+내용</option>
@@ -32,39 +32,18 @@
                 </form>
             </div>
             {% if post_lists %}
-            <table class="board-table">
-                <thead>
-                    <tr>
-                        <th class="board-no">번호</th>
-                        <th class="board-title">제목</th>
-                        <th class="board-skill">기술 스택</th>
-                        <th class="board-author">작성자</th>
-                        <th class="board-date">작성 일시</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for post in post_lists %}
-                    <tr>
-                        <td>{{ post.post_portfolio }}</td>
-                        <td>
-                            <a href="{% url 'hanwooplz_app:portfolio' post.post_portfolio %}">
-                                {{ post.title }}
-                            </a>
-                        </td>
-                        <td>
-                            {{ post.tech_stacks.0 }}
-                        </td>
-                        <td>
-                            <a href="{% url 'hanwooplz_app:myinfo' post.author_id %}">
-                                {{ post.author }}
-                            </a>
-                        </td>
-                        <td>{{ post.created_at }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="posts-grid">
+                {% for post in post_lists %}
+                <a class="post-tile" href="{% if is_portfolio %}{% url "hanwooplz_app:portfolio" post.post_portfolio %}{% else %}{% url "hanwooplz_app:project" post.post_project %}{% endif %}">
+                    <picture class="post-thumbnail">
+                        <img src="{% static 'img/'|add:post.tech_stacks.0|add:'.svg' %}" alt="썸네일">
+                    </picture>
+                    <h3 class="post-title">{{ post.title }}</h3>
+                    <p class="post-author">{{ post.author }}</p>
+                    <p class="post-created_at">{{ post.created_at }}</p>
+                </a>
+                {% endfor %}
+            </div>
             <div class="page">
                 {% if page_obj.has_previous %}
                     {% if query %}

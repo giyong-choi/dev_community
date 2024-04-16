@@ -15,15 +15,24 @@
         <main>
             <div class="post-container">
                 <h3 class="title">{{ title }}</h3>
-                <div class="period">프로젝트 기간: {{ start_date }}~{{ end_date }}</div>
-                <div class="members">총 참여인원: {{ members }} 명</div>
+                <div class="info-box">
+                    <div class="info-title">프로젝트 기간</div>
+                    <div class="info-content">{{ start_date }}~{{ end_date }}</div>
+                </div>
+                <div class="info-box">
+                    <div class="info-title">총 참여인원</div>
+                    <div class="info-content">{{ members }} 명</div>
+                </div>
                 <div class="tech-stack-conatiner">
                     {% for tech_stack in tech_stacks %}
                         <div class="tech-stack">#{{ tech_stack }} </div>
                     {% endfor %}
                 </div>
                 {% if ext_link %}
-                <div class="ext_link">외부 링크: <a href="{{ ext_link }}">{{ ext_link }}</a></div>
+                <div class="info-box">
+                    <div class="info-title">외부 링크</div>
+                    <div class="info-content"><a href="{{ ext_link }}">{{ ext_link }}</a></div>
+                </div>
                 {% endif %}
                 <div class="content">{{ content | safe }}</div>
                 <div class="subsidiary">
