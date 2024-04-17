@@ -93,13 +93,13 @@
     </div>
 </body>
 <script>
-    var image_path = 'img/{{ tech_stacks.0 }}.svg';
+    var image_path = '{% static "img/" %}{{ tech_stacks.0 }}.svg';
     var img = new Image();
-    img.src = "{% static '' %}" + image_path;
+    img.src = image_path;
 
     img.onload = function() {
         // 이미지가 로드되었을 때 실행되는 코드
-        document.getElementById('picture-container').innerHTML = '<img src="' + "{% static '' %}" + image_path + '" alt="썸네일" style="height: 100%; width: 80%;">';
+        document.getElementById('picture-container').innerHTML = '<img src="' + image_path + '" alt="썸네일" style="height: 100%; width: 80%;">';
     };
 
     img.onerror = function() {
