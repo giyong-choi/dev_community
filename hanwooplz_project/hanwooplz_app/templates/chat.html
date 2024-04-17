@@ -89,7 +89,7 @@
     return uuid.v4();
   }
 
-  const ws = new WebSocket('ws://3.37.36.77/ws/chat/{{ room_number }}/');
+  const ws = new WebSocket('ws://127.0.0.1:8000/ws/chat/{{ room_number }}/');
 
   document.addEventListener("DOMContentLoaded", function () {
     const messageInputDom = document.querySelector('#chat-message-input');
@@ -339,7 +339,7 @@
     });
   });
 
-  const ws2 = new WebSocket('ws://3.37.36.77/ws/chat_list/');
+  const ws2 = new WebSocket('ws://127.0.0.1:8000/ws/chat_list/');
 
   ws2.onmessage = function (e) {
     const chatListData = JSON.parse(e.data);

@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     'channels_redis',
 ]
 
-REDIS_HOST = '3.37.36.77'
+REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 
 ASGI_APPLICATION = "hanwooplz_project.asgi.application"

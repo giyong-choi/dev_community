@@ -4,6 +4,7 @@
     align-items: center;
     height: auto;
     margin-bottom: 100px;
+    padding: 20px 0;
 }
 
 .post-container {
@@ -51,12 +52,6 @@
     font-size: 14px;
     margin-top: 10px;
     color: #555;
-}
-
-.content {
-    font-size: 16px;
-    margin-top: 20px;
-    color: #333;
 }
 
 .subsidiary {
@@ -153,12 +148,6 @@ picture img {
     font-size: 48px;
 }
 
-.main-container {
-    padding-top: 70px;
-    padding-bottom: 20px;
-    height: auto;
-}
-
 main {
     width: 100%;
     max-width: 600px;
@@ -184,13 +173,11 @@ main {
     color: #777;
 }
 
-.info-content,
-.content {
+.info-content {
     font-size: large;
     background-color: #eaeaea;
     padding: 5px;
     display: block;
-    align-items: center;
     border-radius: 8px;
     line-height: normal;
 }
@@ -205,8 +192,17 @@ main {
     min-height: 200px;
     color: #333;
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     padding: 15px;
+    line-height: normal;
+    font-size: large;
+    background-color: #eaeaea;
+    border-radius: 8px;
+}
+
+.content p {
+    text-align: left;
 }
 
 .card button {
