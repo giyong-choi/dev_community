@@ -74,13 +74,11 @@
                     <h1 class="profile-name" >{{ full_name }}</h1>
                     <span class="profile-name" style="font-size: 30px; ">{{ username }}</span>
                 </div>
-                <div class="profile-right-bottom"
-                    style="display: flex; flex-direction: column; justify-content: left; align-items: left; text-align: left;">
-                    <span class="profile-name" style="margin-top: 10px; font-size: 16px; color: #000000;">직무: {{ job }}</span>
-                    <div class="profile-bio-wrapper"
-                        style="display: grid; justify-content: left; text-align: left; margin-top: 10px; text-align: left;">
+                <div class="profile-right-bottom">
+                    <span class="profile-job">직무: {{ job }}</span>
+                    <div class="profile-bio-wrapper">
                         <div style="margin-bottom: 10px; display: grid; justify-content: left; text-align: left;">
-                            <span class="profile-info" style="margin-top: 10px; font-size: 16px; color: #000000;">
+                            <span class="profile-info">
                                 주요 기술스택:
                                 {% if tech_stack|length > 1 %}
                                 {{ tech_stack|join:", " }}
