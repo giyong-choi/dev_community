@@ -36,7 +36,7 @@
                 {% for post in post_lists %}
                 <a class="post-tile" href="{% if is_portfolio %}{% url "hanwooplz_app:portfolio" post.post_portfolio %}{% else %}{% url "hanwooplz_app:project" post.post_project %}{% endif %}">
                     <picture class="post-thumbnail">
-                        <img src="{% static 'img/'|add:post.tech_stacks.0|add:'.svg' %}" alt="썸네일">
+                        <img src="{% static 'img/' %}{{ post.tech_stacks.0 }}.svg" alt="썸네일">
                     </picture>
                     <h3 class="post-title">{{ post.title }}</h3>
                     <p class="post-author">{{ post.author }}</p>
