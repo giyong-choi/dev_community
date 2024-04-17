@@ -14,11 +14,10 @@
     <div class="main-container">
         <main>
             <div class="post-container">
-                <picture style="width: 100%; height: 300px">
+                <picture id="picture-container" style="width: 100%; height: 300px">
                     {% if project_status != 1 %}
                     <p id="deprecated">{% if project_status == 2 %}모집 완료{% else %}모집 중단{% endif %}</p>
                     {% endif %}
-                    <img src="{% static 'img/'|add:tech_stacks.0|add:'.svg' %}" alt="썸네일" style="height: 100%; width: 80%;">
                 </picture>
                 <div class="title-box">
                     <h3 class="title">{{ title }}</h3>
@@ -93,6 +92,21 @@
 
     </div>
 </body>
+<script>
+    var image_path = 'img/{{ tech_stacks.0 }}.svg';
+    var img = new Image();
+    img.src = "{% static '' %}" + image_path;
+
+    img.onload = function() {
+        // 이미지가 로드되었을 때 실행되는 코드
+        document.getElementById('picture-container').innerHTML = '<img src="' + "{% static '' %}" + image_path + '" alt="썸네일" style="height: 100%; width: 80%;">';
+    };
+
+    img.onerror = function() {
+        // 이미지 로드에 실패했을 때 실행되는 코드
+        document.getElementById('picture-container').innerHTML = '<p style="font-size: 100px;">{{ tech_stacks.0 }}</p>';
+    };
+</script>
 <script>
     var postId = "{{ post_id }}"
     var currentUser = "{{ request.user }}"
