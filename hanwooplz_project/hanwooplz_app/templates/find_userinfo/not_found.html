@@ -4,15 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
     <style>
         body {
             background-color: white;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             margin: 0;
         }
 
@@ -35,6 +36,7 @@
 </head>
 
 <body>
+    {% include 'nav.html' %}
     <p>해당하는 유저 정보가 없습니다.</p>
 </body>
 

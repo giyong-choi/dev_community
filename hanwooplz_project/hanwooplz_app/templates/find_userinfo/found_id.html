@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
     <style>
         body {
             background-color: white;
-            color: black;
+            color: white;
             font-family: Arial, sans-serif;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             margin: 0;
         }
 
@@ -38,6 +38,7 @@
 </head>
 
 <body>
+    {% include 'nav.html' %}
     <p>당신의 아이디는 <strong>{{ user_id }}</strong> 입니다.</p>
     <a href="{% url 'hanwooplz_app:login' %}">로그인하러가기</a>
 </body>

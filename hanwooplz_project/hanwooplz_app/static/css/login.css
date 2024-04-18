@@ -3,10 +3,11 @@ body {
     color: black;
     font-family: Arial, sans-serif;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100vh;
     margin: 0;
+    animation: slideIn 1s ease-in-out;
 }
 
 .login-container {
@@ -15,6 +16,7 @@ body {
     border-radius: 20px;
     text-align: center;
     position: relative;
+    margin-top: 150px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
@@ -97,10 +99,6 @@ body {
     background: linear-gradient(360deg, transparent, #04ffaf);
     animation: btn-anim4 1s linear infinite;
     animation-delay: 0.75s;
-}
-
-.login-container {
-    animation: slideIn 1s ease-in-out;
 }
 
 @keyframes slideIn {

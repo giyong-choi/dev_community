@@ -5,15 +5,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}" />
     <style>
         body {
             background-color: white;
             color: white;
             font-family: Arial, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             margin: 0;
         }
 
@@ -23,6 +24,7 @@
             padding: 100px;
             border-radius: 20px;
             text-align: center;
+            margin-top: 150px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
@@ -82,6 +84,7 @@
 </head>
 
 <body>
+    {% include 'nav.html' %}
     <form method="post">
         {% csrf_token %}
         <label for="email">이메일:</label>
