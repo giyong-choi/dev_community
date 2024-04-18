@@ -128,7 +128,7 @@ def myinfo(request, user_id):
             category = 'question'
             postcategory = PostQuestion.objects.filter(post=post).first()
 
-        if postcategory:
+        if postcategory and selected_category == 'postquestion':
             posts.append({
                 'title': post.title,
                 'content': post.content,
@@ -136,7 +136,16 @@ def myinfo(request, user_id):
                 'post_id': postcategory.id,
                 "category": category,
             })
-
+        elif postcategory and selected_category != 'postquestion':
+            tech_stack_str = postcategory.tech_stack.strip("[]'").split(",")
+            posts.append({
+                'title': post.title,
+                'content': post.content,
+                'created_at': post.created_at,
+                'post_id': postcategory.id,
+                "category": category,
+                "post_tech_stack": tech_stack_str,
+            })
     context = {
         "user_id": userinfo.id,
         "username": userinfo.username,
