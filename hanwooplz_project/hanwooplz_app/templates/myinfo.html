@@ -125,6 +125,9 @@
                         href="{% if post.category == 'portfolio' %}{% url 'hanwooplz_app:portfolio' post.post_id %}{% elif post.category == 'project' %}{% url 'hanwooplz_app:project' post.post_id %}{% elif post.category == 'question' %}{% url 'hanwooplz_app:question' post.post_id %}{% endif %}">
                         <h2>{{ post.title }}</h2>
                     </a>
+                    {% if post.post_tech_stack %}
+                    <p>기술스택:{{ post.post_tech_stack.0 }}</p>
+                    {% endif %}
                     <p>글쓴이:{{ username }}</p>
                     <p>게시일:{{ post.created_at }}</p>
                 </div>
