@@ -28,6 +28,7 @@ jobs:
     - name: Get secrets
       run: |
         echo "${{ secrets.SECRETS }}" > hanwooplz_project/hanwooplz_project/secrets.json
+        cat hanwooplz_project/hanwooplz_project/secrets.json  # secrets.json 파일 내용 확인
     - name: Run Tests
       env:
         NAME: ${{ secrets.NAME }}
