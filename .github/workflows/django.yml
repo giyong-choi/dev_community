@@ -28,16 +28,10 @@ jobs:
     - name: Get secrets and create secrets.json
       run: |
         echo "{" > hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"NAME\": \"${{ secrets.NAME }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"USER\": \"${{ secrets.USER }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"PASSWORD\": \"${{ secrets.PASSWORD }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"HOST\": \"${{ secrets.HOST }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"PORT\": \"${{ secrets.PORT }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
         echo "  \"SECRET_KEY\": \"${{ secrets.SECRET_KEY }}\"," >> hanwooplz_project/hanwooplz_project/secrets.json
-        echo "  \"ALLOWED_HOSTS\": [\"${{ secrets.ALLOWED_HOSTS }}\"]" >> hanwooplz_project/hanwooplz_project/secrets.json
         echo "}" >> hanwooplz_project/hanwooplz_project/secrets.json
         cat hanwooplz_project/hanwooplz_project/secrets.json  # Verify the content of secrets.json
     - name: Run Tests
       run: |
         cd hanwooplz_project
-        python manage.py test
+        python manage.py test --settings=hanwooplz_project.settings_local
