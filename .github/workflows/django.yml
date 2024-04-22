@@ -32,8 +32,8 @@ jobs:
         PASSWORD: ${{ secrets.PASSWORD }}
         HOST: ${{ secrets.HOST }}
         PORT: ${{ secrets.PORT }}
+        SECRET_KEY: ${{ secrets.SECRET_KEY }}
+        ALLOWED_HOSTS: ${{ secrets.ALLOWED_HOSTS }}
       run: |
         cd hanwooplz_project
         python manage.py test
-      
-        
