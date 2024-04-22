@@ -1,0 +1,25 @@
+name: Django CD
+
+on:
+  workflow_run:
+      workflows: [ "Django CI" ]
+      types:
+        - completed
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: conneect ec2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USERNAME }}
+          key: ${{ secrets.SERVER_KEY }}
+          port: 22
+          script: |
+            cd /home/ubuntu/dev_community
+            git pull
+            sudo systemctl restart uwsgi
